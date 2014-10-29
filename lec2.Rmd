@@ -1,0 +1,53 @@
+# Time series: frequency domain
+
+Frequency domain time series looks at recurring elements. These are e.g.
+caused by:
+* astronomical processes
+  * sun: day-night: temperature, tidas
+  * sun: yearly: phenological, plant physiology
+  * moon: tidal variations
+* social
+  * week, months (?)
+* biological: 
+  * heartbeat, blood pressure
+* vibration:
+  * two flowing media: waves (wind-water), ripples (wind-sand, water-sand)
+  * musical instruments
+* other
+  * anything that turns, or walks
+
+To review: Trigonometry, e.g. http://en.wikipedia.org/wiki/Trigonometry
+
+The angle transformation formula is given here:
+
+$$\sin(A \pm B) = \sin A \cos B \pm \cos A \sin B$$
+
+In case of a function of time $t$, shifted with a phase shift $\phi$:
+
+$$ f(t) = sin(t + \phi) = \sin t \cos \phi + \cos t \sin \phi = a \sin t + b \cos t$$
+
+with $a = \cos \phi$ and $b = \sin \phi$
+
+Try the following code:
+```{r eval=FALSE}
+x = seq(0, 4*pi, length.out = 200) # x plotting range
+
+f = function(dir, x) { # plot the combination of a sin+cos function, based on dir
+	a = sin(dir)
+	b = cos(dir)
+	# three curves:
+	plot(a * sin(x) + b * cos(x) ~ x, type = 'l', asp=1, col = 'green')
+	lines(x, a * sin(x), col = 'red')
+	lines(x, b * cos(x), col = 'blue')
+	# legend:
+	lines(c(10, 10+a), c(2,2), col = 'red')
+	lines(c(10, 10), c(2,2+b), col = 'blue')
+	arrows(x0 = 10, x1 = 10+a, y0 = 2, y1 = 2+b, .1, col = 'green')
+	title("red: sin(x), blue: cos(x), green: sum")
+}
+
+for (d in seq(0, 2*pi, length.out = 100)) {
+	f(d, x)
+	Sys.sleep(.1) # give us some time to think this over!
+}
+```
