@@ -1,4 +1,4 @@
-FILE	= lec2
+FILE	= ex_spectral
 
 all:
 	vi $(FILE).Rmd
