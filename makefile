@@ -1,4 +1,4 @@
-FILE	= ex_spectral
+FILE	= lec7
 
 all:
 	vi $(FILE).Rmd
@@ -11,4 +11,4 @@ view:
 	google-chrome $(FILE).html
 
 www:
-	scp lec*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
+	scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
