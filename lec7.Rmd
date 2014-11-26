@@ -109,16 +109,16 @@ pr = as.data.frame(k[pt,])
 pr
 ```
 
-Assuming that the prediction error is normally distributed, we can form a 95\% prediction interval for $Z(s)$ at this point by
+Assuming that the prediction error is normally distributed, we can form a 95% prediction interval for $Z(s)$ at this point by
 
 ```{r}
-qnorm(c(0.025, 0.95), mean = pr$var1.pred, sd = sqrt(pr$var1.var))
+qnorm(c(0.025, 0.975), mean = pr$var1.pred, sd = sqrt(pr$var1.var))
 ```
 
-which, transformed to the original scale yields a 95\% prediction interval for the _median_ value:
+which, transformed to the original scale yields a 95% prediction interval for the _median_ value:
 
 ```{r}
-exp(qnorm(c(0.025, 0.95), mean = pr$var1.pred, sd = sqrt(pr$var1.var)))
+exp(qnorm(c(0.025, 0.975), mean = pr$var1.pred, sd = sqrt(pr$var1.var)))
 ```
 
 We can form maps of both sides of the interval:
