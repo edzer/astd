@@ -423,11 +423,11 @@ pacf(x)
 
 <p>Autoregressive models relate observations to their previous values:</p>
 
-<p>\[y_i = \sum_{j=1}^p \phi y_{i-j} + e_i\]</p>
+<p>\[y_i = \sum_{j=1}^p \phi_j y_{i-j} + e_i\]</p>
 
 <p>Moving average models relate observations to a moving average of previous noise values:</p>
 
-<p>\[y_i = \sum_{j=1}^p \theta e_{i-j} + e_i\]</p>
+<p>\[y_i = \sum_{k=1}^q \theta_k e_{i-k} + e_i\]</p>
 
 <h2>Trend models</h2>
 
@@ -446,10 +446,10 @@ define the difference operator, \(B^i(y)\) as taking the $i-$th order difference
 
 <h2>arima(p,d,q)</h2>
 
-<p>The arima(p,d,q) model is then obtained by an AR(p) model with an MA(q) model for \(d\)-th order
-differences:</p>
+<p>The arima(p,d,q) model is then obtained by fitting an AR(p) model
+and an MA(q) model to \(d\)-th order differences:</p>
 
-<p>\[B^d(y_t) = \sum_{j=1}^p \phi_j y_{i-j} + \sum_{k=1}^p \theta_k e_{i-k} + e_t\]</p>
+<p>\[B^d(y_t) = \sum_{j=1}^p \phi_j y_{i-j} + \sum_{k=1}^q \theta_k e_{i-k} + e_t\]</p>
 
 <h2>Automatic model fitting</h2>
 
