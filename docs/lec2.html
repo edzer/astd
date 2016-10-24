@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Analysis of spatio-temporal data, WS 2016/7</title>
+<title>Time series: frequency domain</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -204,108 +204,77 @@ hr {
 </head>
 
 <body>
-<h1>Analysis of spatio-temporal data, WS 2016/7</h1>
+<h1>Time series: frequency domain</h1>
 
-<p>Course schedule: </p>
-
-<ol>
-<li>Oct 17: time series: introduction: continuity, time lines, events</li>
-<li>Oct 24: time series: time domain, autocorrelation, AR, MA</li>
-<li>Oct 31: time series: frequency domain; estimation, forecasting</li>
-<li>Nov 7: spatial processes: spatial correlation, variogram</li>
-<li>Nov 14: simple, ordinary, universal kriging; cokriging, stochastic simulation</li>
-<li>Nov 21: spatio-temporal geostatistics: variograms</li>
-<li>Nov 28: spatio-temporal geostatistics: interpolation</li>
-<li>Dec 5: (probably no class)</li>
-<li>Dec 12: point patterns: spatial, temporal, spatio-temporal </li>
-<li>Dec 17: areal data: estimation</li>
-<li>Jan 9: movement data</li>
-<li>Jan 16: Earth observation data; climate model data</li>
-<li>Jan 23: project work</li>
-<li>Jan 31: project work</li>
-<li>Feb 6: project work</li>
-</ol>
-
-<h1>Introduction</h1>
-
-<ol>
-<li>What is spatiotemporal data?</li>
-<li>What is involved in data analysis?</li>
-<li>How do we analyse data?</li>
-<li>What is data science? Is geoinformatics a data science?</li>
-<li>What is <a href="https://www.r-project.org/">R</a>? </li>
-<li>Why do we use 
+<p>Frequency domain time series looks at recurring elements. These are e.g.
+caused by:</p>
 
 <ul>
-<li>R?</li>
-<li><a href="http://rmarkdown.rstudio.com/">R-markdown</a>?</li>
-<li><a href="https://github.com/">GitHub</a>?</li>
+<li>astronomical processes
+
+<ul>
+<li>sun: day-night: temperature, tidas</li>
+<li>sun: yearly: phenological, plant physiology</li>
+<li>moon: tidal variations</li>
 </ul></li>
-</ol>
-
-<h1>1. Time series</h1>
-
-<ol>
-<li>What characterizes time series data? When is data <em>not</em> time series data?</li>
-<li>Which different types of time series data can you think of?</li>
-</ol>
-
-<h1>2. Exercise:</h1>
+<li>social
 
 <ul>
-<li>Bring two different time series data sets to class, on Thursday</li>
+<li>week, months (?)</li>
+</ul></li>
+<li>biological: 
+
+<ul>
+<li>heartbeat, blood pressure</li>
+</ul></li>
+<li>vibration:
+
+<ul>
+<li>two flowing media: waves (wind-water), ripples (wind-sand, water-sand)</li>
+<li>musical instruments</li>
+</ul></li>
+<li>other
+
+<ul>
+<li>anything that turns, or walks</li>
+</ul></li>
 </ul>
 
-<h2>Computer exercises (studlab 125)</h2>
+<p>To review: Trigonometry, e.g. <a href="http://en.wikipedia.org/wiki/Trigonometry">http://en.wikipedia.org/wiki/Trigonometry</a></p>
 
-<p>For those <em>unfamiliar</em> with R (note that this is a lot of work!):</p>
+<p>The angle transformation formula is given here:</p>
 
-<ol>
-<li>Start R</li>
-<li>Open <a href="http://www.r-project.org/">http://www.r-project.org/</a> in a browser</li>
-<li>Browse to Documentation: Manuals</li>
-<li>Open: An Introduction to R</li>
-<li>Work your way through chapters 1-9.</li>
-<li>If you have time left, work your way through the exercises below:</li>
-</ol>
+<p>\[\sin(A \pm B) = \sin A \cos B \pm \cos A \sin B\]</p>
 
-<h2>Pen and paper exercises:</h2>
+<p>In case of a function of time \(t\), shifted with a phase shift \(\phi\):</p>
 
-<p>For the following data:</p>
+<p>\[ f(t) = sin(t + \phi) = \sin t \cos \phi + \cos t \sin \phi = a \sin t + b \cos t\]</p>
 
-<pre><code class="r">x = c(1,2,4,5)
-y = c(2,1,5,4)
-data.frame(x,y)
+<p>with \(a = \cos \phi\) and \(b = \sin \phi\)</p>
+
+<p>Try the following code:</p>
+
+<pre><code class="r">x = seq(0, 4*pi, length.out = 200) # x plotting range
+
+f = function(dir, x) { # plot the combination of a sin+cos function, based on dir
+    a = sin(dir)
+    b = cos(dir)
+    # three curves:
+    plot(a * sin(x) + b * cos(x) ~ x, type = &#39;l&#39;, asp=1, col = &#39;green&#39;)
+    lines(x, a * sin(x), col = &#39;red&#39;)
+    lines(x, b * cos(x), col = &#39;blue&#39;)
+    # legend:
+    lines(c(10, 10+a), c(2,2), col = &#39;red&#39;)
+    lines(c(10, 10), c(2,2+b), col = &#39;blue&#39;)
+    arrows(x0 = 10, x1 = 10+a, y0 = 2, y1 = 2+b, .1, col = &#39;green&#39;)
+    title(&quot;red: sin(x), blue: cos(x), green: sum&quot;)
+}
+
+for (d in seq(0, 2*pi, length.out = 100)) {
+    f(d, x)
+    Sys.sleep(.1) # give us some time to think this over!
+}
 </code></pre>
-
-<pre><code>##   x y
-## 1 1 2
-## 2 2 1
-## 3 4 5
-## 4 5 4
-</code></pre>
-
-<pre><code class="r">plot(x,y)
-</code></pre>
-
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
-
-<h2>Review questions:</h2>
-
-<ol>
-<li>How is the mean for a random variable \(X\) defined?</li>
-<li>Give the equation for covariance between two variables \(x\) and \(y\)</li>
-<li>Give the equation for correlation between two variables \(x\) and \(y\)</li>
-<li>For the samples \(x\) and \(y\), compute the sample mean, the variance and the standard deviation </li>
-<li>Draw the data in a scatter plot (by hand)</li>
-<li>From the table above, compute the covariance between \(x\) and \(y\), and the correlation between \(x\) and \(y\)</li>
-<li>Suppose \(x\) is a time series data, and the rows indicating the time index. Compute the lag 0, lag 1 and lag 2 autocorrelations of \(x\).</li>
-<li>What is the general equation of an autoregressive AR(p) process?</li>
-<li>What is the general equation of a moving average MA(q) process?</li>
-<li>Up to which lag is an AR(p) process correlated?</li>
-<li>Up to which lag is a MA(q) process correlated?</li>
-<li>What can be said about partial correlations of an AR(2) process?</li>
-</ol>
 
 </body>
 
