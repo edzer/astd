@@ -3,7 +3,7 @@
 Frequency domain time series looks at recurring elements. These are e.g.
 caused by:
 * astronomical processes
-  * sun: day-night: temperature, tidas
+  * sun: day-night: temperature, tides
   * sun: yearly: phenological, plant physiology
   * moon: tidal variations
 * social
