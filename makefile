@@ -1,4 +1,4 @@
-FILE	= lec1
+FILE	= lec4
 
 all:
 	vi $(FILE).Rmd
@@ -12,4 +12,8 @@ view:
 	google-chrome docs/$(FILE).html
 
 www:
-	scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
+	#scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
+	cp *html docs
+	git add docs/*
+	git commit -m 'update'
+	git push

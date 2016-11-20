@@ -39,6 +39,17 @@ Course schedule:
 
 * Bring two different time series data sets to class, on Thursday
 
+## Computer exercises (studlab 125)
+
+For those *unfamiliar* with R (note that this is a lot of work!):
+
+1. Start R
+1. Open http://www.r-project.org/ in a browser
+1. Browse to Documentation: Manuals
+1. Open: An Introduction to R
+1. Work your way through chapters 1-9.
+1. If you have time left, work your way through the exercises below:
+
 ## Pen and paper exercises:
 
 For the following data:
@@ -47,7 +58,10 @@ For the following data:
 x = c(1,2,4,5)
 y = c(2,1,5,4)
 data.frame(x,y)
+plot(x,y)
 ```
+
+## Review questions:
 
 1. How is the mean for a random variable $X$ defined?
 1. Give the equation for covariance between two variables $x$ and $y$
