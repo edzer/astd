@@ -1,4 +1,4 @@
-FILE	= lec4
+FILE	= lec5
 
 all:
 	vi $(FILE).Rmd
@@ -15,5 +15,5 @@ www:
 	#scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
 	cp *html docs
 	git add docs/*
-	git commit -m 'update'
+	git commit -a -m 'update'
 	git push

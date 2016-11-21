@@ -1,0 +1,102 @@
+reading data from the airbase data sets at
+http://www.eea.europa.eu/data-and-maps/data/airbase-the-european-air-quality-database-7
+data by country -> download file -> unzip file -> unzip AirBase_XX_v7_rawdata.zip with XX
+the iso code
+1: daily data
+```{r}
+library(xts)
+# get all files:
+#l = list.files(pattern = "DE")
+l = list.files(pattern = "DK")
+# select those with daily data:
+days = l[substr(l, 18, 20) == "day"]
+# code 5:
+pm10files = days[substr(days, 8, 12) == "00005"]
+```
+
+A function that reads in a single month:
+```{r}
+read_month <- function (filename) {
+	f0 = read.table(filename)
+	f0$Date = as.Date(f0[[1]])
+	# select the right columns:
+	f = f0[,seq(2, 62, by = 2)]
+	# stack the rows in colums
+	f = reshape(f, varying = list(1:31), direction = "long")
+	# now, id time day, and id is the month index:
+	f$Date = f0$Date[f$id] + f$time - 1
+	# get the quality flags:
+	qual = reshape(f0[,seq(3, 63, by = 2)], varying = list(1:31), direction = "long")
+	# deselect everything with quality flag == 0: this also excludes the 
+	# non-existing days (e.g. day number 31 for even months)
+	f = f[qual$V3 != 0,]
+	# create an xts file, return it:
+	xts(f$V2, f$Date) 
+}
+```
+Apply this function to every file, return a list:
+```{r}
+lst = lapply(pm10files, function(x) read_month(x))
+```
+merge all elements of this list:
+```{r}
+daily.pm10 = do.call(merge, lst)
+# add station ID as variable names to the new object:
+dimnames(daily.pm10) = list(NULL, substr(pm10files, 1, 7))
+head(daily.pm10)
+```
+
+## 2: hourly data
+
+```{r}
+days = l[substr(l, 18, 21) == "hour"]
+# code 5:
+pm10files = days[substr(days, 8, 12) == "00005"]
+```
+
+read a the hourly data for each single station:
+```{r}
+Sys.setenv(TZ = "UTC") # avoid DST problems...
+read_day <- function(filename) {
+	f0 = read.table(filename)
+	f0$time = as.POSIXct(f0[[1]])
+	# select the right columns:
+	f = f0[,seq(2, 48, by = 2)]
+	# stack the rows in colums
+	f = reshape(f, varying = list(1:24), direction = "long")
+	# now, id time day, and id is the month index:
+	f$time = f0$time[f$id] + (f$time - 1) * 3600
+	# get the quality flags:
+	qual = reshape(f0[,seq(3, 49, by = 2)], varying = list(1:24), direction = "long")
+	# deselect everything with quality flag == 0: this also excludes the 
+	# non-existing days (e.g. day number 31 for even months)
+	f = f[qual$V3 != 0,]
+	# create an xts file, return it:
+	xts(f$V2, f$time) 
+}
+```
+apply this function to all files:
+```{r}
+lst = lapply(pm10files, function(x) read_day(x))
+hourly.pm10 = do.call(merge, lst)
+```
+there might be stations completely empty (DE):
+```{r}
+empty = which(sapply(lst, function(x) length(x)==0))
+if (length(empty) > 0)
+    pm10files = pm10files[-empty]
+```
+add column names:
+```{r}
+dimnames(hourly.pm10) = list(NULL, substr(pm10files, 1, 7))
+head(hourly.pm10)
+```
+
+### NOTE the following:
+1. no for loops, but lapply, which returns station datasets in a list
+2. do.call is a single call to merge, passing all files as arguments
+3. without using dimnames, the resulting object prints VERY messy, as default dimnames are created from the call
+4. alternatives to reshape: 
+  - `stack`
+  - `as.vector(as.matrix(f[,seq(3, 63, by = 2)]))`    # hour-by-hour
+  - `as.vector(t(as.matrix(f[,seq(3, 63, by = 2)])))` # in time order
