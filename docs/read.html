@@ -260,22 +260,39 @@ pm10files = days[substr(days, 8, 12) == &quot;00005&quot;]
 <p>merge all elements of this list:</p>
 
 <pre><code class="r">daily.pm10 = do.call(merge, lst)
-</code></pre>
-
-<pre><code>## Error in as.data.frame(x): argument &quot;x&quot; is missing, with no default
-</code></pre>
-
-<pre><code class="r"># add station ID as variable names to the new object:
+# add station ID as variable names to the new object:
 dimnames(daily.pm10) = list(NULL, substr(pm10files, 1, 7))
+head(daily.pm10)
 </code></pre>
 
-<pre><code>## Error in dimnames(daily.pm10) = list(NULL, substr(pm10files, 1, 7)): object &#39;daily.pm10&#39; not found
-</code></pre>
-
-<pre><code class="r">head(daily.pm10)
-</code></pre>
-
-<pre><code>## Error in head(daily.pm10): object &#39;daily.pm10&#39; not found
+<pre><code>##            DK0012R DK0012R DK0012R DK0021A DK0021A DK0030A DK0030A DK0030A
+## 2001-01-01      NA      NA      NA    49.5      NA   216.0      NA      NA
+## 2001-01-02      NA      NA      NA    30.2      NA    30.4      NA      NA
+## 2001-01-03      NA      NA      NA    25.1      NA    27.0      NA      NA
+## 2001-01-04      NA      NA      NA    21.8      NA    32.9      NA      NA
+## 2001-01-05      NA      NA      NA    21.0      NA    32.2      NA      NA
+## 2001-01-06      NA      NA      NA      NA      NA    23.4      NA      NA
+##            DK0031A DK0031A DK0034A DK0034A DK0041A DK0041A DK0045A DK0045A
+## 2001-01-01      NA      NA      NA      NA   13.90      NA      NA      NA
+## 2001-01-02      NA      NA      NA      NA   12.30      NA      NA      NA
+## 2001-01-03      NA      NA      NA      NA   15.30      NA      NA      NA
+## 2001-01-04      NA      NA      NA      NA   15.40      NA      NA      NA
+## 2001-01-05      NA      NA      NA      NA    8.02      NA      NA      NA
+## 2001-01-06      NA      NA      NA      NA    6.50      NA      NA      NA
+##            DK0045A DK0046A DK0046A DK0047A DK0048A DK0051A DK0051A DK0051A
+## 2001-01-01      NA      NA      NA      NA      NA      NA      NA      NA
+## 2001-01-02      NA      NA      NA      NA      NA      NA      NA      NA
+## 2001-01-03      NA      NA      NA      NA      NA      NA      NA      NA
+## 2001-01-04      NA      NA      NA      NA      NA      NA      NA      NA
+## 2001-01-05      NA      NA      NA      NA      NA      NA      NA      NA
+## 2001-01-06      NA      NA      NA      NA      NA      NA      NA      NA
+##            DK0052A DK0052A DK0053A DK0053A DK0054A DK0054A
+## 2001-01-01      NA      NA      NA      NA      NA      NA
+## 2001-01-02      NA      NA      NA      NA      NA      NA
+## 2001-01-03      NA      NA      NA      NA      NA      NA
+## 2001-01-04      NA      NA      NA      NA      NA      NA
+## 2001-01-05      NA      NA      NA      NA      NA      NA
+## 2001-01-06      NA      NA      NA      NA      NA      NA
 </code></pre>
 
 <h2>2: hourly data</h2>
@@ -313,36 +330,26 @@ read_day &lt;- function(filename) {
 hourly.pm10 = do.call(merge, lst)
 </code></pre>
 
-<pre><code>## Error in as.data.frame(x): argument &quot;x&quot; is missing, with no default
-</code></pre>
-
 <p>there might be stations completely empty (DE):</p>
 
 <pre><code class="r">empty = which(sapply(lst, function(x) length(x)==0))
-</code></pre>
-
-<pre><code>## Error in which(sapply(lst, function(x) length(x) == 0)): argument to &#39;which&#39; is not logical
-</code></pre>
-
-<pre><code class="r">if (length(empty) &gt; 0)
+if (length(empty) &gt; 0)
     pm10files = pm10files[-empty]
-</code></pre>
-
-<pre><code>## Error in eval(expr, envir, enclos): object &#39;empty&#39; not found
 </code></pre>
 
 <p>add column names:</p>
 
 <pre><code class="r">dimnames(hourly.pm10) = list(NULL, substr(pm10files, 1, 7))
+head(hourly.pm10)
 </code></pre>
 
-<pre><code>## Error in dimnames(hourly.pm10) = list(NULL, substr(pm10files, 1, 7)): object &#39;hourly.pm10&#39; not found
-</code></pre>
-
-<pre><code class="r">head(hourly.pm10)
-</code></pre>
-
-<pre><code>## Error in head(hourly.pm10): object &#39;hourly.pm10&#39; not found
+<pre><code>##                     DK0012R DK0030A DK0034A DK0045A
+## 2004-01-01 00:00:00      NA  3735.1   584.9    46.1
+## 2004-01-01 01:00:00      NA    95.6    93.2    41.0
+## 2004-01-01 02:00:00      NA    50.7    67.5    16.4
+## 2004-01-01 03:00:00      NA    43.2    54.7    18.9
+## 2004-01-01 04:00:00      NA    36.4    34.8     8.7
+## 2004-01-01 05:00:00      NA    27.4    25.4     9.3
 </code></pre>
 
 <h3>NOTE the following:</h3>
