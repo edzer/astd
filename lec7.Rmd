@@ -1,195 +1,52 @@
----
-title: "geostatistics: 2"
-output: html_document
----
-# Geostatistics, continued
+# assignment; areal/lattice data
 
-## What is the actual model?
-In the case of
-```{r}
-library("sp")
-data(meuse)
-coordinates(meuse) = ~x+y
-data(meuse.grid)
-coordinates(meuse.grid) = ~x+y
-gridded(meuse.grid) = TRUE
-library("gstat")
-model = vgm(.6, "Sph", 900, .05)
-k = krige(log(zinc)~1, meuse, meuse.grid, model)
-spplot(k["var1.pred"])
-```
+## assignment WS 2016/17
 
-the actual model used for the $\log(\mbox{zinc})$ data, called $Z(s)$ is:
-$$Z(s) = m + e(s)$$
-with $m$ a (spatially) constant mean, and $e(s)$ a residual for which
-$$E(e(s)) = 0$$
-and
-$$0.5 Var(e(s)-e(s+h)) = \gamma(h)$$
-with $\gamma(h)$ the variogram _model_ of $Z(s)$:
+The assignment is to carry out a spatio-temporal analysis on a
+dataset of your choice, using one of the methods that we dealt with
+during the course so far, or another (after approval), and report
+on this.
 
-```{r}
-v = variogram(log(zinc)~1, meuse)
-plot(v, model)
-```
+The report shall:
 
-Here, `v` is the _sample variogram_, to which the variogram model is usually fitted:
+* have 1000-2000 words of free text (i.e., excluding the script)
+* be structured like a short scientific report (introduction, data, methods, results, discussion and conclusion, list of references)
+* state in the introduction clearly the research question (or hypothesis)
+* be submitted as a .zip file with the report in an R-Markdown file (or similar), but in any case include the data, and be easily reproducible, as well as in final form (typically, .html)
+* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions
+* the reference list shall include at least three pieces of related work
+* each of the works listed in the references shall be referred to in the main text
+* be written in scientific style
+* be kept simple
 
-```{r}
-fit.variogram(v, model)
-```
+## Areal / lattice data.
 
-This model gives us values of the semivariance, and by that the covariance, for _every distance_, thus enabling interpolation at _any location_.
+For typical lattice data, observed values are associated with
+areas, and the union of the areas observed cover the region of
+interest. The boundaries of the areas do not follow from the observed
+phenomen's properties, but typically from external constraints to
+the observation process.
 
-We distinguish the first order properties ($m$, mean: spatially constant) from the second order propertiers ($\gamma(h)$ variogram: spatially stationary, meaning independent of location $s$, only depending on separation distance)
+Examples include:
 
-We can choose more elaborate models for the trend _function_ by specifying predictors in the formula, e.g. 
+* socio-economic data, related to administrative regions (census, administration)
+* health data, related to hospital wards, or aggregated to adm. regions
+* satellite imagery (aggregates, related to pixels)
+* climate model predictions, as aggregates over regions
 
-```{r}
-k2 =krige(log(zinc)~dist, meuse, meuse.grid, model)
-```
+Problems include:
 
-uses the model
-$$Z(s) = \beta_0 + \beta_1 f(s) + e(s)$$
-with $f(s)$ the distance to river at location $s$. This variable needs to be present at all locations in both `meuse` and `meuse.grid`, in order to carry out prediction.
-
-## What can we do to improve?
-
-Note that we already improved by working on log-concentrations rather than raw concentrations.
-
-Some other options:
-
-1. transform the distribution: by log, or by some other form (square root? cube root? power transform? inverse Gaussian? Box-Cox?)
-1. carry out local kriging instead of global kriging
-1. make the variogram direction-dependend (assume anisotropy, instead of isotropy)
-1. stratify the region, and carry out variogram modelling and interpolation for each stratum (sub-region)
-
-Example of local kriging:
-
-```{r}
-k$var1.pr.n5 = krige(log(zinc)~1, meuse, meuse.grid, model, nmax = 5)$var1.pred
-spplot(k[c("var1.pred", "var1.pr.n5")], labels = c("global", "local, n=5"))
-```
+* areal interpolation: interpolate (downscale/upscale) the observed values to some other units, that are hierchically related to the current areal units (e.g. landsat/modis, change of administrative regions, integration of health and census data)
+* evaluating models (testing hypothesis) expressed as $y = X\beta + e$, where either $y$ and/or $e$ exhibit autocorrelation
 
 
-## How can we evaluate, and compare models?
+Typical analysis (see R package `spdep`) follows a path:
 
-Evaluation usually includes _visual_ control, i.e. is the predicted surface realistic, and fit for the purpose?
+* build, and evaluate a spatial weight matrix (based on neighbours, or distance, or both)
+* test for spatial correlation using Moran's I
+* give significant spatial correlation, build models that account for that
 
-Other options: cross validation
+Models used:
+* simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1)
+* conditional autoregressive models (asdar 2nd ed, 9.4.1.2)
 
-```{r}
-cv = krige.cv(log(zinc)~1, meuse, model, nmax = 5)
-```
-
-mean errors:
-
-```{r}
-mean(cv$residual)
-```
-
-error variability, e.g. RMSE:
-```{r}
-sqrt(mean(cv$residual^2))
-```
-
-
-## What do prediction errors mean?
-Consider at an arbitrary, single location
-
-```{r}
-pt = SpatialPoints(cbind(179660, 331860))
-image(k[1])
-points(pt)
-```
-
-the prediction and prediction error:
-
-```{r}
-pr = as.data.frame(k[pt,])
-pr
-```
-
-Assuming that the prediction error is normally distributed, we can form a 95% prediction interval for $Z(s)$ at this point by
-
-```{r}
-qnorm(c(0.025, 0.975), mean = pr$var1.pred, sd = sqrt(pr$var1.var))
-```
-
-which, transformed to the original scale yields a 95% prediction interval for the _median_ value:
-
-```{r}
-exp(qnorm(c(0.025, 0.975), mean = pr$var1.pred, sd = sqrt(pr$var1.var)))
-```
-
-We can form maps of both sides of the interval:
-
-```{r}
-k$lower = exp(qnorm(0.025, mean = k$var1.pred, sd = sqrt(k$var1.var)))
-k$upper = exp(qnorm(0.975, mean = k$var1.pred, sd = sqrt(k$var1.var)))
-spplot(k[c("lower", "upper")])
-```
-
-and we could classify intervals according to their position with respect to a threshold value, e.g. 500:
-
-```{r}
-f = ifelse(k$upper < 500, 1, ifelse(k$lower > 500, 3, 2))
-k$f = factor(f, labels = c("lower", "not distinguishable", "higher"))
-spplot(k["f"], main = "zinc concentration prediction relative to 500 ppm")
-```
-
-## Multivariate geostatistics
-
-Just as the _cross correlelation function_ gives the (lagged, cross) correlation between two time series, the _cross variogram_ gives the spatial cross correlation between two spatial variables. In gstat, we build a `gstat` object holding one _or more_ variables, by incrementally adding one variable:
-
-```{r}
-g = gstat(NULL, "log-zn", log(zinc)~1, meuse)
-g = gstat(g, "log-pb", log(lead)~1, meuse)
-g = gstat(g, "log-cd", log(cadmium)~1, meuse)
-v = variogram(g)
-plot(v)
-```
-
-Fitting a model to these is somewhat constrained, and needs to be jointly; the following fits a _linear model of coregionalisation_ (LMC):
-
-```{r}
-v.fit = fit.lmc(v, g, vgm(1, "Sph", 900, 1))
-plot(v, v.fit)
-```
-
-Prediction under such models, called _cokriging_, is done _jointly_, i.e. the three variables $Z_1(s)$, $Z_2(s)$ and $Z_3(s)$ are predicted in a single step, that also results in the prediction covariance matrix with the prediction variances and covariance for a particular location.
-
-## Conditional simulation
-Kriging and cokriging provide the _marginal_ distribution of $Z(s_0)$ (with scalar or vector $Z$), but not the joint distribution of $Z(\cdot)$ at different locations. Meaning, we cannot answer the question, for two locations $p$ and $q$, what the probability is that _both_ $Z(p)$ and $Z(q)$ exceed a threshold. The multivariate distribution needed is high-dimensional if we consider many prediction locations, and so we usually _sample_ from this distribution, and call this _conditional simulation_
-
-```{r}
-s = krige(log(zinc)~1, meuse, meuse.grid, model, nsim = 10, nmax = 15)
-spplot(s)
-```
-
-Unlike predictions which are always smooth, the variogram of simulations resembles that of the data:
-
-```{r}
-v1 = variogram(var1.pred~1, k)
-v2 = variogram(sim1 ~ 1, s)
-plot(gamma~dist, v2, xlim = c(0, 1500), ylim = c(0, 0.7))
-points(gamma~dist, v1, col = 'red')
-lines(variogramLine(model, 1500, col = 'blue'))
-```
-
-## Geostatistics for temporally varying data
-
-Spatial, temporally varying data can be seen, most simply as coming from the model
-$$Z(s,t) = m + e(s,t)$$
-with $s$ and $t$ the spatial location and temporal index (instance) of $Z$.
-
-Suppose that we have only temporal replications for a small number of time steps, $t_i, i = 1,...,k$. We could then treat $Z(s,t)$ as $Z(s,t_i) = Z_{i}(s)$. If we are not interested in predictions for other time steps, we can proceed as if the time steps constitute different variables, and treat it as a multivariable problem. Run, for instance, `demo(pcb)`.
-
-A simple alternative would be to treat $(s,t)$ as a three- or (four-) dimensional space, model variograms and interpolate in this space. More
-alternatives will follow later.
-
-## Exercises
-
-1. run demo `pcb` in package `gstat`, and try to understand what is going on.
-1. find a data sets _not used in one of the R packages_ that allows for geostatistical interpolation.
-1. interpolate the data using some kriging variety.
-1. give results (variogram, map) and some model diagnostics.

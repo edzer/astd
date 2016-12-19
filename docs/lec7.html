@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>assignment; areal/lattice data</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>assignment; areal/lattice data</h1>
+
+<h2>assignment WS 2016/17</h2>
+
+<p>The assignment is to carry out a spatio-temporal analysis on a
+dataset of your choice, using one of the methods that we dealt with
+during the course so far, or another (after approval), and report
+on this.</p>
+
+<p>The report shall:</p>
+
+<ul>
+<li>have 1000-2000 words of free text (i.e., excluding the script)</li>
+<li>be structured like a short scientific report (introduction, data, methods, results, discussion and conclusion, list of references)</li>
+<li>state in the introduction clearly the research question (or hypothesis)</li>
+<li>be submitted as a .zip file with the report in an R-Markdown file (or similar), but in any case include the data, and be easily reproducible, as well as in final form (typically, .html)</li>
+<li>the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions</li>
+<li>the reference list shall include at least three pieces of related work</li>
+<li>each of the works listed in the references shall be referred to in the main text</li>
+<li>be written in scientific style</li>
+<li>be kept simple</li>
+</ul>
+
+<h2>Areal / lattice data.</h2>
+
+<p>For typical lattice data, observed values are associated with
+areas, and the union of the areas observed cover the region of
+interest. The boundaries of the areas do not follow from the observed
+phenomen&#39;s properties, but typically from external constraints to
+the observation process.</p>
+
+<p>Examples include:</p>
+
+<ul>
+<li>socio-economic data, related to administrative regions (census, administration)</li>
+<li>health data, related to hospital wards, or aggregated to adm. regions</li>
+<li>satellite imagery (aggregates, related to pixels)</li>
+<li>climate model predictions, as aggregates over regions</li>
+</ul>
+
+<p>Problems include:</p>
+
+<ul>
+<li>areal interpolation: interpolate (downscale/upscale) the observed values to some other units, that are hierchically related to the current areal units (e.g. landsat/modis, change of administrative regions, integration of health and census data)</li>
+<li>evaluating models (testing hypothesis) expressed as \(y = X\beta + e\), where either \(y\) and/or \(e\) exhibit autocorrelation</li>
+</ul>
+
+<p>Typical analysis (see R package <code>spdep</code>) follows a path:</p>
+
+<ul>
+<li>build, and evaluate a spatial weight matrix (based on neighbours, or distance, or both)</li>
+<li>test for spatial correlation using Moran&#39;s I</li>
+<li>give significant spatial correlation, build models that account for that</li>
+</ul>
+
+<p>Models used:</p>
+
+<ul>
+<li>simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1)</li>
+<li>conditional autoregressive models (asdar 2nd ed, 9.4.1.2)</li>
+</ul>
+
+</body>
+
+</html>
