@@ -41,6 +41,7 @@ Movement data may come from direct, or indirect sources.
 * transport and logistics: when should the bus leave / how do I optimize a transportation system?
 * how do I describe the interactions between moving agents
 * what is the activity/transportation mode of person $x$ at time $t$? (at home, at work, biking, running, car, bus, ...)
+* how can I organize the traffic in my city, optimize my road network / traffic lights etc.?
 
 
 ## Datasets:
