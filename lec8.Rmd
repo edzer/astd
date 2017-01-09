@@ -55,3 +55,7 @@ Movement data may come from direct, or indirect sources.
 ## Software:
 
 * R: see [CRAN Task View](https://cran.r-project.org/web/views/SpatioTemporal.html)
+
+## UseR 2016 tutorial material on movement data
+
+Found [here](https://edzer.github.io/UseR2016/#movement-data)
