@@ -1,0 +1,44 @@
+# Movement
+
+Movement is an inherently spatio-temporal phenomenon: position
+(of something) moves over time.
+
+The study of movement data has happened in rather different areas, including
+
+* transporation research, logistics
+* ecology (animal movement, cells)
+* crowd control
+* sports
+* GI Science
+* Computer science
+* political science (countries)
+
+## Movement data
+
+Movement data may come from direct, or indirect sources.
+
+* direct: GPS, cell phone triangulation, mix (google timeline), payment transactions, public transportation check in/out, ...
+   - GPS: typically sampling density is (nearly) regular, and dense (what is dense enough?)
+   - others: sparse sampling, large gaps: interpolation?
+* indirect: e.g. from video footage or wind fields: object tracking
+   - identify objects (overlap, shade)
+   - track them through imagery / raster maps
+
+## Types of movement
+
+* continuous: rigid objects
+* split/merge: countries, rivers, depressions, storms
+* discontinuous: e.g. the capital of Germany
+
+## Questions related to movement data
+
+* where was (is) person $x$ at time $t$?
+* did persons $x$ and $y$ meet in time interval $T$? (alibi problem)
+* how does a crowd behave? what is the critical density of a crowd?
+* given a trajectory $q$, what is the home range of animal $Q$? (utilization distribution)
+* on which road am I driving? (map matching) $\Rightarrow$ where am I?
+* given a set of trajectories, on which roads can one drive, in which way? How are roads connected?
+* transport and logistics: when should the bus leave / how do I optimize a transportation system?
+* how do I describe the interactions between moving agents
+* what is the activity/transportation mode of person $x$ at time $t$? (at home, at work, biking, running, car, bus, ...)
+
