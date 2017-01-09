@@ -50,3 +50,7 @@ Movement data may come from direct, or indirect sources.
 * [movebank](https://www.movebank.org/), _Movebank is a free, online database of animal tracking data hosted by the Max Planck Institute for Ornithology. We help animal tracking researchers to manage, share, protect, analyze, and archive their data. Movebank is an international project with over 11,000 users, including people from research and conservation groups around the world._
 * citybike hires (pick up, drop off): [NY](https://www.citibikenyc.com/system-data), London
 * NY taxi drives: pick up, drop off
+
+## Software:
+
+* R: see [CRAN Task View](https://cran.r-project.org/web/views/SpatioTemporal.html)
