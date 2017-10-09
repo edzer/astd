@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Analysis of spatio-temporal data, WS 2016/7</title>
+<title>Analysis of spatio-temporal data, WS 2017/8</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -58,7 +58,7 @@ hljs.initHighlightingOnLoad();
 </script>
 
 <!-- MathJax scripts -->
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
 </script>
 
 
@@ -204,26 +204,25 @@ hr {
 </head>
 
 <body>
-<h1>Analysis of spatio-temporal data, WS 2016/7</h1>
+<h1>Analysis of spatio-temporal data, WS 2017/8</h1>
 
 <p>Course schedule: </p>
 
 <ol>
-<li>Oct 17: time series: introduction: continuity, time lines, events</li>
-<li>Oct 24: time series: time domain, autocorrelation, AR, MA</li>
-<li>Oct 31: time series: frequency domain; estimation, forecasting</li>
-<li>Nov 7: spatial processes: spatial correlation, variogram</li>
-<li>Nov 14: simple, ordinary, universal kriging; cokriging, stochastic simulation</li>
-<li>Nov 21: spatio-temporal geostatistics: variograms</li>
-<li>Nov 28: spatio-temporal geostatistics: interpolation</li>
-<li>Dec 5: (probably no class)</li>
-<li>Dec 12: point patterns: spatial, temporal, spatio-temporal </li>
-<li>Dec 17: areal data: estimation</li>
-<li>Jan 9: movement data</li>
-<li>Jan 16: Earth observation data; climate model data</li>
-<li>Jan 23: project work</li>
-<li>Jan 31: project work</li>
-<li>Feb 6: project work</li>
+<li>Oct 9: time series: introduction: continuity, time lines, events</li>
+<li>Oct 16: time series: time domain, autocorrelation, AR, MA</li>
+<li>Oct 23: time series: frequency domain; estimation, forecasting</li>
+<li>Oct 30: spatial processes: spatial correlation, variogram</li>
+<li>Nov 6: simple, ordinary, universal kriging; cokriging, stochastic simulation</li>
+<li>Nov 13: spatio-temporal geostatistics: variograms</li>
+<li>Nov 20: spatio-temporal geostatistics: interpolation</li>
+<li>Dec 4: (probably no class)</li>
+<li>Dec 11: point patterns: spatial, temporal, spatio-temporal </li>
+<li>Dec 18: areal data: estimation</li>
+<li>Jan 8: movement data</li>
+<li>Jan 15: Earth observation data; climate model data</li>
+<li>Jan 22: project work</li>
+<li>Jan 29: project work</li>
 </ol>
 
 <h1>Introduction</h1>
@@ -252,11 +251,7 @@ hr {
 
 <h1>2. Exercise:</h1>
 
-<ul>
-<li>Bring two different time series data sets to class, on Thursday</li>
-</ul>
-
-<h2>Computer exercises (studlab 125)</h2>
+<h2>Oct 12 (unsupervised):</h2>
 
 <p>For those <em>unfamiliar</em> with R (note that this is a lot of work!):</p>
 
@@ -266,8 +261,14 @@ hr {
 <li>Browse to Documentation: Manuals</li>
 <li>Open: An Introduction to R</li>
 <li>Work your way through chapters 1-9.</li>
-<li>If you have time left, work your way through the exercises below:</li>
 </ol>
+
+<h2>Oct 19:</h2>
+
+<ul>
+<li>For Thu Oct 19: bring two different time series data sets to class;
+carry out exploratory statistics on them, using R</li>
+</ul>
 
 <h2>Pen and paper exercises:</h2>
 
@@ -288,9 +289,9 @@ data.frame(x,y)
 <pre><code class="r">plot(x,y)
 </code></pre>
 
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
 
-<h2>Review questions:</h2>
+<h2>Review/refresher questions:</h2>
 
 <ol>
 <li>How is the mean for a random variable \(X\) defined?</li>
