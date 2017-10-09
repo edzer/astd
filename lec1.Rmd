@@ -9,6 +9,7 @@ Course schedule:
 1. Nov 6: simple, ordinary, universal kriging; cokriging, stochastic simulation
 1. Nov 13: spatio-temporal geostatistics: variograms
 1. Nov 20: spatio-temporal geostatistics: interpolation
+1. Nov 27: spatio-temporal geostatistics: simulation
 1. Dec 4: (probably no class)
 1. Dec 11: point patterns: spatial, temporal, spatio-temporal 
 1. Dec 18: areal data: estimation
