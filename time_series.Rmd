@@ -107,6 +107,9 @@ for (i in 2:n)
 	y[i] = phi[1] * y[i-1] + rnorm(1)
 plot(y, type = 'l')
 ```
+```{r}
+pacf(y)
+```
 For higher-order AR(n) processes, we have
  $y(t) = \sum_{j=1}^p \phi_j y(t-j) + e(t)$ with $\phi_j = (\phi_1,...,\phi_p)$ the $p$ AR coefficient (between 0 and 1, with additional constraints for $y$ to be stationary), and $e(t)$ independent, normal, random variable.
 

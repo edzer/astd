@@ -1,0 +1,105 @@
+# Time series: identifying frequencies 
+
+Here are two links that try to explain the fourier transform:
+
+* https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+* http://toxicdump.org/stuff/FourierToy.swf
+
+
+### The Fourier transform
+
+The [Fourier transform](https://en.wikipedia.org/wiki/Fourier_series)
+decomposes any signal into the weighted sum of a number of sin and cos
+functions with different frequency:
+
+$$ s_N(t) = a_0/2 + \sum_{n=1}^{N} \big( a_n \cos(\frac{2\pi n t}{P}) + b_n sin(\frac{2\pi n t}{P}) \big) $$
+
+with $P$ the period (frequency $1/P$), and $N$ the length of the series.
+The Fourier transform, or spectrum, or periodogram, depicts amplitude
+against frequency.
+
+### artificial data:
+
+pure sinus data, unsmoothed (raw) spectrum:
+```{r fig=TRUE}
+n = 1000
+x = pi * 1:n
+s1 = sin(x / 100)
+plot(s1, type = 'l')
+plot(spectrum(s1))
+```
+
+smoothed spectrum:
+
+```{r}
+plot(spectrum(s1, spans = c(3,5)))
+```
+
+higher frequency sinus:
+
+```{r}
+s2 = sin(x / 10)
+plot(s2, type = 'l')
+plot(spectrum(s2))
+```
+
+smoothed curve:
+
+```{r}
+plot(spectrum(s2, spans = c(3,5)))
+```
+
+superposition of both:
+
+```{r}
+plot(s1+s2, type = 'l')
+plot(spectrum(s1+s2, spans = c(3,5)))
+```
+
+adding noise to them
+
+```
+ns = s1 + s2 + rnorm(n)
+plot(ns, type = 'b')
+plot(spectrum(ns))
+```
+
+smoothed spectrum:
+
+```{r}
+plot(spectrum(s1+s2+rnorm(n), spans = c(3,5)))
+```
+
+### stl components of co2:
+
+```{r fig=TRUE}
+plot(co2)
+s = stl(co2, 12)
+plot(s)
+s$time.series[1:10,]
+```
+
+fetching the seasonal component:
+
+```{r fig=TRUE}
+seasonal = s$time.series[,1]
+plot(seasonal)
+plot(spectrum(seasonal))
+plot(spectrum(seasonal, spans = c(3,5)))
+```
+
+fetching the trend component:
+
+```{r fig=TRUE}
+trend = s$time.series[,2]
+plot(trend)
+plot(spectrum(trend))
+```
+
+fetching the remainder:
+
+```{r fig=TRUE}
+remainder = s$time.series[,3]
+plot(remainder)
+plot(spectrum(remainder))
+```
