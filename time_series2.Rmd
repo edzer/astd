@@ -1,0 +1,62 @@
+---
+title: "time_series"
+author: "Edzer Pebesma"
+date: "October 16, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 
+
+```{r}
+library(gstat)
+data(wind)
+ls()
+head(wind)
+head(wind.loc)
+```
+
+Let's take a single vector out of the `wind` dataset, and plot it
+```{r}
+rpt = wind$RPT
+plot(rpt, type = 'l')
+```
+We now see that the x-axis is not meaningfully referenced (index: 1,2,...,n); we can do better by defining a `ts` object:
+```{r}
+rpt = ts(wind$RPT, start = 1961, frequency = 365.25)
+plot(rpt)
+rpt = ts(wind$RPT[1:365], start = 1961, frequency = 365.25)
+plot(rpt)
+```
+
+
+```{r}
+rpt = ts(as.matrix(wind), start = 1961, frequency = 365.25)
+plot(rpt[,4:13])
+plot(rpt[,4])
+```
+
+What is the correlation between two stations?
+```{r}
+library(sp)
+library(maptools)
+library(maps)
+library(mapdata)
+wind.loc[1:3,]
+wind.loc$y = as.numeric(char2dms(as.character(wind.loc[["Latitude"]])))
+wind.loc$x = as.numeric(char2dms(as.character(wind.loc[["Longitude"]])))
+coordinates(wind.loc) = ~x+y
+map("worldHires", xlim = c(-11,-5.4), ylim = c(51,55.5))
+plot(wind.loc, add=TRUE, pch=16)
+text(coordinates(wind.loc), pos=1, label=wind.loc$Station, cex = .75, col = 'blue')
+```
+
+```{r}
+names(wind)
+acf(wind[,c("MUL", "DUB")])
+acf(wind[,c("MUL", "DUB", "BIR", "KIL")])
+acf(wind[,-(1:3)])
+```
