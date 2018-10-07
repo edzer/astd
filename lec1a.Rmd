@@ -1,10 +1,21 @@
-# Analysis of spatio-temporal data, WS 2016/7, Oct 24
+# Analysis of spatio-temporal data, WS 2018/9, Oct 7
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
 set.seed(1331) # make reproduction static
 ```
 
+
+# Goals of this course
+
+For the participants to develop
+
+* an idea about which types of spatio-temporal data there are, and how they are typically analysed
+* hands-on experience with some of these analysis methods
+* experience with common difficulties found in real world datasets
+* skills to make analyses reproducible, and communicate these
+
+Individually, for the the final assignment a use-case of spatio-temporal data analysis will be developed, and reported
 
 ## Reminder
 
@@ -16,7 +27,9 @@ set.seed(1331) # make reproduction static
 The first two articles in [R News
 2/2](https://www.r-project.org/doc/Rnews/Rnews_2002-2.pdf), "Time
 Series in R 1.5.0" and "Naive Time Series Forecasting Methods"
-provide some introduction to the topics discussed below.
+provide some introduction to the topics discussed below. A more
+extensive text, focused on forecasting, is Hyndman and 
+Athanasopoulos' [Forecasting: Principles and Prac](https://otexts.org/fpp2/)
 
 ## Time series: time domain, autocorrelation, AR, MA
 
@@ -28,7 +41,7 @@ from time events
 
 $$\\{t_1,t_2,...,t_n\\} t \in [T_1,T_2].$$ 
 
-Typical time series data are samples $y(t_i)$ taken from the process, with $t_{i+1}-t_i$ is constant, the time interval. If this is the case, we typically write $y(t_i)$ as $y_i$.
+Regular time series data are samples (or aggregations over a time interval) $y(t_i)$ taken from the process, with $t_{i+1}-t_i$  constant: the time interval. If this is the case, we typically write $y(t_i)$ as $y_i$.
 
 We will now give examples using datasets available in R.
 
@@ -116,7 +129,7 @@ and plot them:
 acf(oz)
 ```
 
-where, obviously, the lag-0 autocorrelation is 1. The blue
+where, trivially, the lag-0 autocorrelation is 1. The blue
 lines indicate the bounds between which autocorrelation are not
 significantly different from zero.
 
