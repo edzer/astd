@@ -6,17 +6,6 @@ set.seed(1331) # make reproduction static
 ```
 
 
-# Goals of this course
-
-For the participants to develop
-
-* an idea about which types of spatio-temporal data there are, and how they are typically analysed
-* hands-on experience with some of these analysis methods
-* experience with common difficulties found in real world datasets
-* skills to make analyses reproducible, and communicate these
-
-Individually, for the the final assignment a use-case of spatio-temporal data analysis will be developed, and reported
-
 ## Reminder
 
 1. What is correlation?

@@ -1,6 +1,16 @@
 # Analysis of spatio-temporal data, WS 2018/9
 
-Course schedule: 
+# Goals of this course
+
+For the participants to develop
+
+* an idea about which types of spatio-temporal data there are, and how they are typically analysed
+* hands-on experience with some of these analysis methods
+* experience with common difficulties found in real world datasets
+* skills to make analyses reproducible, and communicate these
+
+
+# Course schedule: 
 
 1. Oct 8: Time series: introduction: continuity, time lines, events
 1. Oct 15: Time series: time domain, autocorrelation, AR, MA
@@ -17,6 +27,7 @@ Course schedule:
 1. Jan 14: project work
 1. Jan 21: project work
 1. Jan 28: project work
+
 
 # Introduction
 
