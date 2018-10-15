@@ -18,7 +18,7 @@ The first two articles in [R News
 Series in R 1.5.0" and "Naive Time Series Forecasting Methods"
 provide some introduction to the topics discussed below. A more
 extensive text, focused on forecasting, is Hyndman and 
-Athanasopoulos' [Forecasting: Principles and Prac](https://otexts.org/fpp2/)
+Athanasopoulos' [Forecasting: Principles and Practice](https://otexts.org/fpp2/)
 
 ## Time series: time domain, autocorrelation, AR, MA
 
@@ -57,6 +57,13 @@ where time `0` refers to the start of the observations. This dataset is a classi
 hist(faithful[,2])
 ```
 
+and even a bivariate bimodal distribution:
+```{r}
+plot(faithful[, -3], main = "faithful data: Eruptions of Old Faithful",
+  xlab = "Eruption time (min)",
+  ylab = "Waiting time to next eruption (min)")
+```
+
 We will concentrate here, on time series of the first kind.
 
 ## Ozone
@@ -72,7 +79,7 @@ oz = na.omit(airquality$Ozone)
 plot(oz, type = 'l')
 ```
 
-which essentially "glues" the series together, horizontally. This is not, in general, a good idea.
+which essentially "glues" the series together, horizontally. This is **not**, in general, a good idea. Try to think of reasons why not.
 
 The series obtained looks rather messy.  A question that arises,
 is whether this series can be considered to be purely random,
@@ -97,7 +104,7 @@ Temporal correlation investigates whether two observations $y_i$ and $y_{i+1}$ a
 compute this correlation, and plot it, by
 ```{r}
 cor(head(oz, -1), tail(oz, -1))
-plot(head(oz, -1), tail(oz, -1))
+plot(head(oz, -1), tail(oz, -1), asp = 1)
 ```
 
 The correlation is moderate, but not extremely high. Could it be caused by random chance? We can generate
