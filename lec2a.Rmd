@@ -1,0 +1,160 @@
+# Factor and character data
+
+First of all, it is important to realize that R often reads character data as `factor` (categorical) variables. E.g. after using `read.csv`, you might see a variable that looks like time, e.g. in a data.frame:
+```{r echo=FALSE}
+df = data.frame(month = c("2001-01", "2001-02"), value = c(33.5, 22.9))
+```
+```{r}
+df
+```
+where it turns out the `month` values are `factor` objects:
+```{r}
+class(df$month)
+```
+In such cases, you may have to convert them to character first, before attempting any of the manipulations shown below:
+```{r}
+df$month = as.character(df$month)
+df
+class(df$month)
+```
+Note that they are _not printed differently_, when printing the data.frame. When printing the column only, or `summary(df)`, you will see differences.
+
+# Time and time series data in R
+
+## Date and DateTime 
+
+Date or DateTime values in R can be numbers (`numeric`), or can have one of the
+two built-in date / datetime classes. In the first case, we could for instance
+have decimal year:
+```{r}
+(year = c(1995, 1995.25, 1995.5, 1995.75, 1996, 1996.25))
+```
+denoting a regular series with quarterly time stamps expressed as decimal year.
+Nothin about this data reveals that these numbers refer to time stamps, or periods.
+
+### Date
+
+Date values are integers with a class, 
+```{r}
+s = Sys.Date()
+as.integer(s) # nr of days since 1970-01-01
+class(s)
+```
+which print as strings which we can recognize as dates:
+```{r}
+s
+```
+We can also read Date from text:
+```{r}
+as.Date(c("2008-12-31", "2009-01-02"))
+```
+but only if formatted like YYYY-MM-DD or YYYY/MM/DD. In case of other formats, we need to specify `format`:
+```{r}
+as.Date(c("2008-31-12", "2009-02-01"), format = "%Y-%d-%m")
+```
+
+### POSIXct
+Similarly, DateTime objects, 
+```{r}
+s = Sys.time()
+as.numeric(s) # seconds since Jan 1, 1970, midnight UTC
+class(s)
+```
+print like human-readable time stamps:
+```{r}
+s
+```
+These can be read from strings formed like "YYYY-mm-dd hh:MM:SS" and some varieties,
+```{r}
+as.POSIXct("2005-12-31 20:31:55")
+```
+but in other cases one has to specify `format` e.g. like
+```{r}
+as.POSIXct("2005-31-12 20.31.55", format = "%Y-%d-%m %H.%M.%S")
+```
+help is found in `?strptime`, capitalization is important.
+
+### Others: Monthly and Quarterly data
+
+Quarterly data, e.g. encoded as
+```{r}
+qua = c("2001Q1", "2001Q2", "2001Q3", "2001Q4", "2002Q1")
+```
+or monthly data encoded like
+```{r}
+mo = c("2001-01", "2001-02", "2001-03")
+```
+is  obviously not numeric. We can convert it e.g. into decimal year, e.g. by
+```{r}
+(qua.ny = as.numeric(
+ sub("Q4", ".75",
+  sub("Q3", ".5",
+   sub("Q2", ".25",
+    sub("Q1", ".00", qua))))))
+```
+for months:
+```{r}
+(mo.ny = as.numeric(substr(mo, 1, 4)) + (as.numeric(substr(mo, 6, 7)) - 1)/12)
+```
+(alternatively, given that there are no gaps one can convet such data directly into a `ts` object; see below)
+
+or we can convert it into Date, by
+```{r}
+(qua.d = as.Date(
+ sub("Q4", "-10-01",
+  sub("Q3", "-07-01",
+   sub("Q2", "-04-01",
+    sub("Q1", "-01-01", qua))))))
+(mo.d = as.Date(paste0(mo, "-01")))
+```
+
+Note that we do different things here:
+```{r}
+diff(qua.ny)
+diff(qua.d)
+diff(mo.ny)
+diff(mo.d)
+```
+Depending on the application, one of the two might be the "better" approach:
+
+* if we want to do time series analysis that needs regular time series (time domain analysis, spectral analysis) we want the regular one
+* if we are looking at time-extensive variables, e.g. the amount of export or emmissions over a period, taking the difference in period lengths into account _first_ may prevent us from finding spurious periodicities, caused by differences in period (month, quarter) durations
+
+## time series objects
+
+We see that a dataset like
+```{r}
+head(faithful)
+```
+is void of any reference to time, whereas 
+```{r}
+head(co2)
+```
+does have time reference. The latter is a time series object: R knows that the measurements refer to time steps.
+
+### ts
+
+The simples, and (only?) built-in (i.e. not provided by an add-on package) time series structure is that of `ts`, for regular (univariate or multivariate) time series. `ts` objects are a simple vector (or matrix) with a class and time attributes:
+```{r}
+attributes(co2)
+```
+where `tsp` denotes start, end, and frequency. If frequency is 12 or 4, R uses some heuristics to interpret these data as monthly and quarterly, respectively: 
+
+```{r}
+(m.ts = ts(1:3, start = mo.ny[1], end = mo.ny[3], frequency = 12))
+(q.ts = ts(1:5, start = qua.ny[1], end = qua.ny[5], frequency = 4))
+```
+
+### zoo, xts
+
+Packages `zoo` and `xts` provide ways to deal with data that have `Date` or `POSIXct` time stemps, and that are possibly irregular:
+```{r}
+library(xts)
+(z = zoo(rnorm(3), mo.d))
+(x = xts(rnorm(3), mo.d))
+```
+They have functions to find out whether time series are regular:
+```{r}
+is.regular(x)
+is.regular(x, strict = TRUE)
+```

@@ -2,19 +2,22 @@
 
 Frequency domain time series looks at recurring elements. These are e.g.
 caused by:
+
 * astronomical processes
-  * sun: day-night: temperature, tides
-  * sun: yearly: phenological, plant physiology
-  * moon: tidal variations
+    * sun: day-night: temperature, tides
+    * sun: yearly: phenological, plant physiology
+    * moon: tidal variations
 * social
-  * week, months (?)
+    * week, months (?)
 * biological: 
-  * heartbeat, blood pressure
+    * heartbeat
+    * blood pressure
+    * walking, flying, swimming
 * vibration:
-  * two flowing media: waves (wind-water), ripples (wind-sand, water-sand)
-  * musical instruments
+    * two flowing media: waves (wind-water), ripples (wind-sand, water-sand)
+    * musical instruments
 * other
-  * anything that turns, or walks
+    * anything that turns, or walks
 
 To review: Trigonometry, e.g. http://en.wikipedia.org/wiki/Trigonometry
 
@@ -78,7 +81,7 @@ weights such that
 * observations, at the edge of entering/exiting the window, have a weight of zero
 * (as a consequence:) observations closer to the middle of the window have maximum weight
 
-We can construct such a filter, e.g. by
+We can construct such a filter, e.g. by a parabola:
 ```{r}
 weights = 1 - seq(-1, 1, length.out = 20)^2
 weights = weights / sum(weights) # sum to 1
