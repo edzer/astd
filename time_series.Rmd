@@ -87,10 +87,12 @@ and the possibility to plot the autocorrelations:
 ```{r}
 plot(a)
 ```
+
 We can plot autocorrelations up to larger lags by
 ```{r}
 plot(acf(wind$RPT, lag.max = 365))
 ```
+
 Can you explain the negative autocorrelations around lag 180, and positive ones around 360?
 
 ## AR(n) processes; generating them
@@ -110,6 +112,7 @@ plot(y, type = 'l')
 ```{r}
 pacf(y)
 ```
+
 For higher-order AR(n) processes, we have
  $y(t) = \sum_{j=1}^p \phi_j y(t-j) + e(t)$ with $\phi_j = (\phi_1,...,\phi_p)$ the $p$ AR coefficient (between 0 and 1, with additional constraints for $y$ to be stationary), and $e(t)$ independent, normal, random variable.
 
@@ -123,10 +126,12 @@ Although such series are autocorrelated up to high lags
 ```{r}
 acf(y)
 ```
+
 it is their _partial_ autocorrelatoin coefficients that reveal their generating model:
 ```{r}
 pacf(y)
 ```
+
 Partial autocorrelation at lag $p$ ($p > 1$) can be thought of as the autocorrelation between 
 the first $n-p$ and the last $n-p$ observations _after correcting for all correlations occuring at shorter lags_.
 

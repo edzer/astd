@@ -54,7 +54,7 @@ In particular, the semivariance for a distance (lag) interval $h$ is defined as
 $$\gamma(h) = \frac{1}{2}E((Z(s)-Z(s+h))^2)$$
 and is estimated from sample data $Z(s_i)$, $i=1,...,n$ by
 $$\hat{\gamma}(h) = \frac{1}{2N_h}\sum_{i=1}^{N_h}(Z(s_i)-Z(s_i+h))^2$$
-where $N_h$ is the number of point pairs $\{Z(s_i),Z(s_i+h)}$ separated by distance (interval) $h$.
+where $N_h$ is the number of point pairs $\{Z(s_i),Z(s_i+h)\}$ separated by distance (interval) $h$.
 
 Doing this:
 ```{r}

@@ -1,5 +1,5 @@
 ---
-title: "time_series"
+title: "correlations, cross correlations, spatial correlation"
 author: "Edzer Pebesma"
 date: "October 16, 2017"
 output: html_document
@@ -49,9 +49,15 @@ wind.loc[1:3,]
 wind.loc$y = as.numeric(char2dms(as.character(wind.loc[["Latitude"]])))
 wind.loc$x = as.numeric(char2dms(as.character(wind.loc[["Longitude"]])))
 coordinates(wind.loc) = ~x+y
+proj4string(wind.loc) = "+proj=longlat +datum=WGS84"
 map("worldHires", xlim = c(-11,-5.4), ylim = c(51,55.5))
 plot(wind.loc, add=TRUE, pch=16)
 text(coordinates(wind.loc), pos=1, label=wind.loc$Station, cex = .75, col = 'blue')
+```
+
+Correlations between stations, matching by time:
+```{r}
+print(cor(wind[,-(1:3)]), digits = 2)
 ```
 
 ```{r}
@@ -59,4 +65,21 @@ names(wind)
 acf(wind[,c("MUL", "DUB")])
 acf(wind[,c("MUL", "DUB", "BIR", "KIL")])
 acf(wind[,-(1:3)])
+```
+
+Which values do the stations have, at a particular time, or averaged over time?
+```{r}
+map("worldHires", xlim = c(-11,-5.4), ylim = c(51,55.5))
+plot(wind.loc, add=TRUE, pch=16)
+# merge wind and wind.loc:
+df = setNames(data.frame(wind = t(wind[2,-(1:3)])), "wind")
+df$Code = row.names(df)
+out = merge(wind.loc, df)
+text(coordinates(out), pos=1, label=as.character(out$wind), cex = .75, col = 'blue')
+```
+
+```{r}
+m = map("worldHires", xlim = c(-11,-5.4), ylim = c(51,55.5), fill = TRUE, plot = FALSE)
+spplot(out, "wind", sp.layout = map2SpatialPolygons(m, ID=1:5),
+  xlim = c(-11,-5.4), ylim = c(51,55.5))
 ```
