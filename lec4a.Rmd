@@ -1,7 +1,7 @@
 ---
 title: "correlations, cross correlations, spatial correlation"
 author: "Edzer Pebesma"
-date: "October 16, 2017"
+date: "Nov 5, 2018"
 output: html_document
 ---
 
@@ -11,7 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Irish wind dataset
 
-Consider the classic Irish wind dataset:
+Consider the classic Irish wind dataset
+([Haslett and Raftery, 1989](https://www.jstor.org/stable/2347679?seq=1#metadata_info_tab_contents)):
 ```{r}
 library(gstat)
 data(wind)
@@ -20,7 +21,7 @@ head(wind)
 head(wind.loc)
 ```
 
-Let's take a single vector out of the `wind` dataset ([Haslette and Raftery, 1989](https://www.jstor.org/stable/2347679?seq=1#metadata_info_tab_contents)), and plot it
+Let's take a single vector out of the `wind` dataset  , and plot it
 ```{r}
 rpt = wind$RPT
 plot(rpt, type = 'l')
