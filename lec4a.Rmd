@@ -24,6 +24,7 @@ Let's take a single vector out of the `wind` dataset, and plot it
 rpt = wind$RPT
 plot(rpt, type = 'l')
 ```
+
 We now see that the x-axis is not meaningfully referenced (index: 1,2,...,n); we can do better by defining a `ts` object:
 ```{r}
 rpt = ts(wind$RPT, start = 1961, frequency = 365.25)
