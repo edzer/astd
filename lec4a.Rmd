@@ -9,8 +9,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## 
+## Irish wind dataset
 
+Consider the classic Irish wind dataset:
 ```{r}
 library(gstat)
 data(wind)
