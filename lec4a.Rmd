@@ -20,7 +20,7 @@ head(wind)
 head(wind.loc)
 ```
 
-Let's take a single vector out of the `wind` dataset, and plot it
+Let's take a single vector out of the `wind` dataset ([Haslette and Raftery, 1989](https://www.jstor.org/stable/2347679?seq=1#metadata_info_tab_contents)), and plot it
 ```{r}
 rpt = wind$RPT
 plot(rpt, type = 'l')
