@@ -1,0 +1,104 @@
+# Spatial data: interpolation, simulation, averaging
+
+### Variogram, covariogram, auto-correlogram
+
+```{r, fig=TRUE}
+library(sp)
+demo(meuse, ask = FALSE) # load meuse dataset
+library(gstat)
+hist(meuse$zinc)
+hist(log(meuse$zinc))
+plot(variogram(log(zinc)~1, meuse))
+```
+
+How can we relate the variogram to the autocorrelogram?
+
+1. There is no scaling to $[-1,1]$ (this scaling converts covariances to correlation)
+2. Variogram values are strictly positive (mean squares)
+3. Variogram increase with distance (with decreasing correlation)
+
+The variogram and covariogram relate through
+$$\gamma(h) = C(0) - C(h)$$
+with $C(h)$ the covariogram of the process:
+```{r fig=TRUE}
+plot(variogram(log(zinc)~1, meuse, covariogram = TRUE))
+```
+
+### What to choose as lag distance?
+```{r fig=TRUE}
+plot(variogram(log(zinc)~1, meuse))
+plot(variogram(log(zinc)~1, meuse, width = 50))
+plot(variogram(log(zinc)~1, meuse, width = 250))
+```
+
+All still somewhat acceptible; things get weirder when
+```{r fig=TRUE}
+plot(variogram(log(zinc)~1, meuse, width = 20))
+plot(variogram(log(zinc)~1, meuse, width = 500))
+```
+
+### Variogram model
+For further analysis, we need a variogram _model_, a parametric model $\gamma(h)$ that gives semivariance (and hence: covariance, autocorrelation) values for _every_ value of $h$:
+```{r}
+v = variogram(log(zinc)~1, meuse)
+f = fit.variogram(v, vgm(1, "Sph", 300))
+plot(v, f)
+```
+
+The reason for this is that we would like to be able to make a prediction (interpolation) for _any_ location, and this involves _any_ distance(s) to observation values.
+
+Compare: for time series we typically predict (forecast) $y_{t+1\delta}, y_{t+2\delta},...$. Would we want to predict (forecast) values for values _inbetween_, like $y_{t+0.33\delta}$ or $y_{t+7.51\delta}$, then we'd need autocorrelations for these non-multiples of the time interval $\delta$, and we'd need to _interpolate_ (model) the autocorrellogram. 
+
+### Positive definite
+
+Models we fit to a covariogram (or autocorrelation) need to be _positive definite_. This means that for an arbitrary set of points $p_1,...,p_2$ the covariance matrix $C$ of the these points has the following property
+$$a' C a > 0$$
+for non-zero but otherwise arbitrarily chosen weights coefficients $a$. This guarantees, amongst others, that prediction variances are non-negative.
+
+For variograms, signs flip, and we require _negative definite_ functions, to the same effect.
+
+It is easy to go wrong here, for instance the break-line model:
+```{r}
+f0 = fit.variogram(v, vgm(1, "Lin", 700))
+plot(v, f0)
+```
+
+does not have this property in 2 dimensions.
+
+### Coordinates in lat/long
+
+* coordinates on the sphere (geographic, geodetic coordinates) are expressed as angles (longitude, latitude), and not as distances
+* hence, to compute distances between points ($h$), we cannot use Euclides' formula $\sqrt{(x_1-x_2)^2+(y_1-y_2)^2}$
+* R can deal with this automatically, but you need to tell it!
+
+```{r}
+meuse.ll = spTransform(meuse, CRS("+proj=longlat +datum=WGS84"))
+plot(variogram(log(zinc)~1, meuse.ll), main = "distance in km!!")
+proj4string(meuse.ll) = as.character(NA)
+plot(variogram(log(zinc)~1, meuse.ll), main = "distance units ?????")
+```
+
+More in detail:
+```{r}
+(pts = rbind(c(0,0), c(1,0), c(0,1)))
+as.matrix(dist(pts))
+sp::spDists(pts, longlat = FALSE)
+sp::spDists(pts, longlat = TRUE)
+(pts_here = rbind(c(7,52), c(8,52), c(7,53)))
+sp::spDists(pts_here, longlat = FALSE)
+sp::spDists(pts_here, longlat = TRUE)
+```
+
+Note that:
+
+* Euclidian distance calculations are insensitive for swapping x and y
+* Geodetical distance calculations are **NOT** insenstive to axis swapping
+* it is of crucial importance to _not_ mix up longitude and latitude
+* R adopts this order: 1. longitude, 2. latitude (think: x, y)
+
+```{r}
+sp::spDists(pts_here[,c(1,2)], longlat = FALSE)
+sp::spDists(pts_here[,c(2,1)], longlat = FALSE)
+sp::spDists(pts_here[,c(1,2)], longlat = TRUE)
+sp::spDists(pts_here[,c(2,1)], longlat = TRUE)
+```
