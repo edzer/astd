@@ -63,7 +63,7 @@ f0 = fit.variogram(v, vgm(1, "Lin", 700))
 plot(v, f0)
 ```
 
-does not have this property in 2 dimensions.
+does have this property for points in 1, but not in 2 or more dimensions!
 
 ### Coordinates in lat/long
 
