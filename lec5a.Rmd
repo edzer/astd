@@ -41,8 +41,9 @@ plot(variogram(log(zinc)~1, meuse, width = 500))
 For further analysis, we need a variogram _model_, a parametric model $\gamma(h)$ that gives semivariance (and hence: covariance, autocorrelation) values for _every_ value of $h$:
 ```{r}
 v = variogram(log(zinc)~1, meuse)
-f = fit.variogram(v, vgm(1, "Sph", 300))
+f = fit.variogram(v, vgm(1, "Sph", 300, 1))
 plot(v, f)
+f
 ```
 
 The reason for this is that we would like to be able to make a prediction (interpolation) for _any_ location, and this involves _any_ distance(s) to observation values.
@@ -59,7 +60,7 @@ For variograms, signs flip, and we require _negative definite_ functions, to the
 
 It is easy to go wrong here, for instance the break-line model:
 ```{r}
-f0 = fit.variogram(v, vgm(1, "Lin", 700))
+f0 = fit.variogram(v, vgm(1, "Lin", 700, 1))
 plot(v, f0)
 ```
 
