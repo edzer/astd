@@ -52,7 +52,7 @@ Method 2: from a polygon, e.g. a shapefile read by `rgdal::readOGR`. Here, we'll
 summary(meuse.area)
 grd = spsample(meuse.area, type = 'regular', cellsize = 100)
 summary(grd)
-plot(grd)
+plot(grd, cex = .3)
 grd[1:3]
 # get nice coordinate values: fix offset
 grd = spsample(meuse.area, type = 'regular', offset = c(0,0), cellsize = 100)

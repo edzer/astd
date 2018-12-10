@@ -1,6 +1,6 @@
 # assignment; areal/lattice data
 
-## assignment WS 2016/17
+## assignment WS 2018/19
 
 The assignment is to carry out a spatio-temporal analysis on a
 dataset of your choice, using one of the methods that we dealt with
@@ -9,11 +9,12 @@ on this.
 
 The report shall:
 
+* deal with a problem for which analysing spatiotemporal data is needed to solve it
 * have 1000-2000 words of free text (i.e., excluding the script)
 * be structured like a short scientific report (introduction, data, methods, results, discussion and conclusion, list of references)
 * state in the introduction clearly the research question (or hypothesis)
-* be submitted as a .zip file with the report in an R-Markdown file (or similar), but in any case include the data, and be easily reproducible, as well as in final form (typically, .html)
-* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions
+* be submitted as a .zip file with the report in an R-Markdown file (or similar), but in any case include the data, and be easily reproducible, as well as include the final form (either html or pdf)
+* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions, and shall not be suppressed on output
 * the reference list shall include at least three pieces of related work
 * each of the works listed in the references shall be referred to in the main text
 * be written in scientific style
@@ -36,6 +37,7 @@ Examples include:
 
 Problems include:
 
+* estimate proportions or risks from count data
 * areal interpolation: interpolate (downscale/upscale) the observed values to some other units, that are hierchically related to the current areal units (e.g. landsat/modis, change of administrative regions, integration of health and census data)
 * evaluating models (testing hypothesis) expressed as $y = X\beta + e$, where either $y$ and/or $e$ exhibit autocorrelation
 
@@ -50,3 +52,13 @@ Models used:
 * simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1)
 * conditional autoregressive models (asdar 2nd ed, 9.4.1.2)
 
+Useful spdep vignettes:
+
+* [creating neighbours](https://cran.r-project.org/web/packages/spdep/vignettes/nb.pdf)
+* [Introduction to the North Carolina SIDS dataset](https://cran.r-project.org/web/packages/spdep/vignettes/sids.pdf)
+* [Spatial weights objects as sparse matrices and graphs](https://cran.r-project.org/web/packages/spdep/vignettes/nb_igraph.html)
+* ["The Problem of Spatial Autocorrelation:" forty years on](https://cran.r-project.org/web/packages/spdep/vignettes/CO69.pdf)
+
+More modern approaches, using R-INLA:
+
+* [Spatial Data Analysis with R-INLA with Some Extensions](https://www.jstatsoft.org/article/view/v063i20)
