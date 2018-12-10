@@ -9,16 +9,23 @@ on this.
 
 The report shall:
 
-* deal with a problem for which analysing spatiotemporal data is needed to solve it
+* deal with a problem that is solved by analysing spatiotemporal data
 * have 1000-2000 words of free text (i.e., excluding the script)
 * be structured like a short scientific report (introduction, data, methods, results, discussion and conclusion, list of references)
 * state in the introduction clearly the research question (or hypothesis)
-* be submitted as a .zip file with the report in an R-Markdown file (or similar), but in any case include the data, and be easily reproducible, as well as include the final form (either html or pdf)
-* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions, and shall not be suppressed on output
 * the reference list shall include at least three pieces of related work
 * each of the works listed in the references shall be referred to in the main text
 * be written in scientific style
 * be kept simple
+* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions, and shall not be suppressed on output
+
+The report must be submitted as a single .zip file with 
+
+* the report in an R-Markdown file (or similar), 
+* the data used, 
+* the final form (either html or pdf)
+
+The report shall be reproducible based on the included .Rmd file and the material in the .zip file.
 
 ## Areal / lattice data.
 
