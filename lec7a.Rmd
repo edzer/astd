@@ -93,3 +93,16 @@ Key features of this approach:
 See the stars proxy vignette for examples of this pattern; the images above only read and show the pixels present in the html / on screen.
 
 For larger areas and time periods, downloading satellite data to a local storage is a lost game; even if local storage is sufficient, network bandwidth is likely to be the limiting factor.
+
+## This is all about handling, what about modelling?
+
+In terms of spatial statistics, remote sensing data analysis is used e.g.
+
+* to identify features, e.g. forest fires or ice bergs, and use point pattern analysis to model their spatial or spatiotemporal properties (point pattern analysis)
+* to fill gaps, mostly caused by clouds; this is a spatio-temporal interpolation problem (geostatistics)
+* to model relationships between variables, potentially considering the RS image as a lattice variable, modelling and accounting for spatial correlation (lattice data)
+
+Otherwise, typical RS analysis challenges involve
+
+* from continuous to continuous: identify indexes based on multiple bands that express a certain property better than the individual bands (e.g., NDVI for greenness / vegetation abundance)
+* from continuous to discrete: identify land use categories pixel-wise, identify regions of the same type (segmentation), segmenting time series (when did a certain change, e.g. deforestation, happen?)
