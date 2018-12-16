@@ -1,0 +1,95 @@
+# Satellite data
+
+## What are they?
+
+In the following,
+```{r}
+# install.packages("starsdata", repos = "http://pebesma.staff.ifgi.de", type = "source") 
+library(stars)
+granule = system.file("sentinel/S2A_MSIL1C_20180220T105051_N0206_R051_T32ULE_20180221T134037.zip", 
+	package = "starsdata")
+s2 = paste0("SENTINEL2_L1C:/vsizip/", granule, 
+	"/S2A_MSIL1C_20180220T105051_N0206_R051_T32ULE_20180221T134037.SAFE/MTD_MSIL1C.xml:10m:EPSG_32632")
+(p = read_stars(s2, proxy = TRUE))
+plot(p)
+```
+we see a large triangle being black.  These are zero values, (wrongly!) not encoded as NODATA (or NA). Specifying them blanks them out:
+```{r}
+(p = read_stars(s2, proxy = TRUE, NA_value = 0))
+plot(p)
+```
+
+Where do these come from? The Sentinel2 data is composed of 290 km wide swaths, bands of constant width that are not alinged to North or East. These swath observations are then regridded to a predefined 100 km x 100 km grids (10000 x 10000 pixels on the four 10 m reslution bands) in UTM zones. The tiles we get for Germany are e.g.
+
+```{r}
+if (!file.exists("tiles.rda")) {
+        # read tile geometries from:
+        # https://sentinel.esa.int/web/sentinel/missions/sentinel-2/data-products
+        tiles = read_sf("https://sentinel.esa.int/documents/247904/1955685/S2A_OPER_GIP_TILPAR_MPC__20151209T095117_V20150622T000000_21000101T000000_B00.kml")
+        tiles = st_zm(st_collection_extract(tiles, "POLYGON"))
+        tiles$Description = NULL
+        tiles = aggregate(tiles, list(Name = tiles$Name), function(x) x[1])
+        save(tiles, file = "tiles.rda")
+} else
+        load("tiles.rda")
+
+DE = st_as_sf(raster::getData("GADM", country = "DE", level = 1))
+# select scenes:
+
+tiles = tiles[DE,]
+plot(tiles[,1], reset = FALSE, col = sf.colors(categorical=TRUE, alpha=.5))
+plot(DE, add = TRUE, col = NA, border = 'red')
+```
+(Note that the tiles have 10 km overlap, everywhere)
+
+In the case of Sentinel2, for each of these tiles we get an image
+roughly every 5 days. Each image is roughly 1 Gb, and contains [13 bands](https://en.wikipedia.org/wiki/Sentinel-2):
+ 
+* 4 at 10 m resolution, 
+* 6 at 20 m resolution, 
+* 3 at 60 m resolution.
+
+Why not exactly 5 days?
+
+* satellites follow an orbit, and have some revisit time, but not exactly a multiple of days (I think)
+* the orbit is sun synchronous, since reflected sunlight is measured
+* since swath width is constant, close to the poles we get more overlapping swaths than close to the equator, and hence more frequent observations
+
+## Data cubes
+
+Data cubes are data structures where values are arranged at the junction of
+two (one) or more _independent dimensions_. These dimensions can reflect
+(discretized version) of continuous variables (e.g. three space dimension, one
+time dimensions), but also reflect discrete variables (e.g. species, 
+variable measured or modelled in a weather model).
+
+Vector data (points, lines, polygons) can be encoded along a single dimension, as an enumerated set of geographical locations, linestrings, or polygons.
+
+Examples include:
+
+* a simple table (1-dimensional (contrived): sequence of features -> properties)
+* a raster image (2-dimensional: x, y -> cell value)
+* time series for a set of stations (2-dimensional: location, time -> measurement)
+* satellite image (3-dimensional: x, y, color -> pixel value)
+* sequence of satellite images (4-dimensional: x, y, t, color -> pixel value)
+
+Data cubes can be sparse or dense: if they are dense, every combination of dimension values has an actual value (in the database, or the memory object); if they are sparse, only combinations for which there is a data value are stored. Systems for sparse data cubes are relatively rare, an example is [SciDB](https://www.paradigm4.com/try_scidb/).
+
+The [stars](https://github.com/r-spatial/stars) R package implements dense vector and raster data cubes. See the data model vignette (article) for an explanation of the different forms it accepts.
+
+Satellite imagery like Sentinel2 can be seen as sparse data cubes: since the satellites follow a path, a particular observed tile has its own time stamp, and all other tiles will be empty for that time stamp. Also, collections of tiles over different UTM systems do not form a (single) regular grid in x and y.
+
+Nevertheless, it is often easier to (be able to) treat the data as if it were a data cube. We can do this by a _data cube view_: for a particular x/y grid (in a particular coordinate reference system) and a sequence of time steps (e.g. monthly) we _consider_ (in some way, by resampling) the underlying imagery, and visualise it or build models for it. This approach is taken by [Google Earth Engine](https://earthengine.google.com/), and is also followed by the [openEO API](http://openeo.org/). The stars R package follows this design pattern but in a much simplified (pure R) approach.
+
+Key features of this approach:
+
+* keep the data in its original form, but give the user a view resample to a given (dense) data cube; allow arbitrary data cube views 
+* don't mozaic to a common space/time grid before analysing, but do this on the fly
+* for interactive use: only read the pixels that are actually shown on screen; e.g. if North America is 25 M $km^2$ and our viewport (screen) 1000 x 1000 pixels, one pixel (forget the seas) is roughly 25 $km^2$, meaning we _look at data_ on a 5 km grid spacing. This means, for 10 m resolution data, we _read_ one pixel from every 500 rows and colums. This means we (can) discard 99.9996\% of the data.
+* for showing model results, we can (potentially) run the model at the lower resolution (e.g. pixel time series model, or band index such as NDVI)
+* we can develop our model interactively, and switch to batch processing when done with model development
+* no need to download the data, as they are in the cloud
+
+See the stars proxy vignette for examples of this pattern; the images above only read and show the pixels present in the html / on screen.
+
+For larger areas and time periods, downloading satellite data to a local storage is a lost game; even if local storage is sufficient, network bandwidth is likely to be the limiting factor.
