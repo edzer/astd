@@ -12,6 +12,7 @@ The study of movement data has happened in rather different areas, including
 * GI Science
 * Computer science
 * political science (countries)
+* atmospheric chemistry, oil spills, forest fires etc
 
 ## Movement data
 
@@ -22,18 +23,21 @@ Movement data may come from direct, or indirect sources.
    - others: sparse sampling, large gaps: interpolation?
 * indirect: e.g. from video footage or wind fields: object tracking
    - identify objects (overlap, shade)
-   - track them through imagery / raster maps
+   - track them through imagery / raster maps (satellite imagery)
 
 ## Types of movement
 
 * continuous: rigid objects
-* split/merge: countries, rivers, depressions, storms
-* discontinuous: e.g. the capital of Germany
+* split/merge: countries, rivers, depressions, storms, clouds, oil spills
+* discontinuous: e.g. the capital of Germany, chancellor of Germany
 
 ## Questions related to movement data
 
 * where was (is) person $x$ at time $t$?
+* (when) was person $x$ at location $s$?
 * did persons $x$ and $y$ meet in time interval $T$? (alibi problem)
+* is the [functional representation](https://www.tandfonline.com/doi/full/10.1080/13658816.2016.1151520) $T \rightarrow S$ a useful model? How do we observe, interpolate, describe, summarise etc.
+* how can we interpret (segments of) movement? Activity/transportation mode etc.
 * how does a crowd behave? what is the critical density of a crowd?
 * given a trajectory $q$, what is the home range of animal $Q$? (utilization distribution)
 * on which road am I driving? (map matching) $\Rightarrow$ where am I?
