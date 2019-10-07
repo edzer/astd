@@ -12,7 +12,7 @@ For the participants to develop
 
 # Course schedule: 
 
-1. Oct 7: Time series: introduction: continuity, time lines, events
+1. Oct 7: Introduction; Time series: continuity, time lines, events
 1. Oct 14+17: no class
 1. Oct 21: Time series: time domain, autocorrelation, AR, MA
 1. Oct 28: Time series: frequency domain; estimation, forecasting
@@ -55,9 +55,10 @@ For those *unfamiliar* with R (note that this is a lot of work!):
 1. Start R
 1. Open http://www.r-project.org/ in a browser
 1. Browse to Documentation: Manuals
-1. Open: An Introduction to R
-1. Work your way through chapters 1-9.
-1. Alternative: [R for data science](http://r4ds.had.co.nz/)
+1. Open: An Introduction to R (base R)
+1. Work your way through chapters 1-9. (base R)
+1. Alternative: [ModernDive: getting started with R](https://moderndive.com/1-getting-started.html) (tidyverse)
+1. Alternative: [R for data science](http://r4ds.had.co.nz/) (tidyverse)
 
 ## Oct 19:
 
