@@ -1,10 +1,10 @@
-# Analysis of spatio-temporal data, WS 2018/9
+# Analysis of spatio-temporal data, WS 2019/2020
 
 # Goals of this course
 
 For the participants to develop
 
-* an idea about which types of spatio-temporal data there are, and how they are typically analysed
+* an idea about which types of spatio-temporal data there are, and how they can be analysed
 * hands-on experience with some of these analysis methods
 * experience with common difficulties found in real world datasets
 * skills to make analyses reproducible, and communicate these
@@ -12,21 +12,21 @@ For the participants to develop
 
 # Course schedule: 
 
-1. Oct 8: Time series: introduction: continuity, time lines, events
-1. Oct 15: Time series: time domain, autocorrelation, AR, MA
-1. Oct 22: Time series: frequency domain; estimation, forecasting
-1. Oct 29: Spatial processes: spatial correlation, variogram
-1. Nov 5: Simple, ordinary, universal kriging; cokriging, stochastic simulation
-1. Nov 12: Spatio-temporal geostatistics: variograms
-1. Nov 19: Spatio-temporal geostatistics: interpolation and simulation
-1. Nov 26: Point patterns: spatial, temporal, spatio-temporal 
-1. Dec 3: (probably no class)
-1. Dec 10: Areal data: estimation
-1. Dec 17: Earth observation data; climate model data
-1. Jan 7: Movement data
-1. Jan 14: project work
-1. Jan 21: project work
-1. Jan 28: project work
+1. Oct 7: Time series: introduction: continuity, time lines, events
+1. Oct 14+17: no class
+1. Oct 21: Time series: time domain, autocorrelation, AR, MA
+1. Oct 28: Time series: frequency domain; estimation, forecasting
+1. Nov 4: Spatial processes: spatial correlation, variogram
+1. Nov 11: Simple, ordinary, universal kriging; cokriging, stochastic simulation
+1. Nov 18: Spatio-temporal geostatistics: variograms
+1. Nov 25: Spatio-temporal geostatistics: interpolation and simulation
+1. Dec 2: Point patterns: spatial, temporal, spatio-temporal 
+1. Dec 9: Areal data: estimation
+1. Dec 16: Earth observation data; climate model data
+1. Jan 6: Movement data
+1. Jan 13: project work
+1. Jan 20: project work
+1. Jan 27: project work
 
 
 # Introduction
