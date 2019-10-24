@@ -245,13 +245,13 @@ auto.arima(oz)
 
 ## Exercises
 
-1. Generate a random series with white noise added to a second order trend, as was done above; choose and fit an ARIMA model to it using `forecast::auto.arima`, and verify (discuss) whether the model chosen is in accordance to the process you simulated.
+E1. Generate a random series with white noise added to a second order trend, as was done above; choose and fit an ARIMA model to it using `forecast::auto.arima`, and verify (discuss) whether the model chosen is in accordance to the process you simulated.
 ```{r}
 x = -100:200
 y = 50 + 2.0 * x + 0.1 * x^2 + rnorm(301)*50
 forecast::auto.arima(y)
 ```
-2. Repeat this, but make the second order (parabolic) component so small that it is hardly visible in a plot; use `auto.arima` again and discuss the outcome.
+E2. Repeat this, but make the second order (parabolic) component so small that it is hardly visible in a plot; use `auto.arima` again and discuss the outcome.
 ```{r}
 #set.seed(111)
 x = -100:200
@@ -259,20 +259,20 @@ y = 50 + 0.2 * x + 0.01 * x^2 + rnorm(301)*50
 plot(y, type = 'l')
 forecast::auto.arima(y)
 ```
-3. Use `forecast::auto.arima` to choose and fit an ARIMA model to the `co2` time series, interpret the resulting model and coefficients; do read into the documentation of parameter `seasonal` to find out what an sar[x] parameter refers to.
+E3. Use `forecast::auto.arima` to choose and fit an ARIMA model to the `co2` time series, interpret the resulting model and coefficients; do read into the documentation of parameter `seasonal` to find out what an sar[x] parameter refers to.
 ```{r}
 # see https://otexts.com/fpp2/seasonal-arima.html
 forecast::auto.arima(co2)
 ```
-4. Repeat this, but switch off the fitting of a seasonal component.
+E4. Repeat this, but switch off the fitting of a seasonal component.
 ```{r}
 # see https://otexts.com/fpp2/seasonal-arima.html
 forecast::auto.arima(co2, seasonal = FALSE)
 ```
 
-5. Create an `stl` decomposition of `co2` with `plot(stl(co2, "periodic"))`, and try to interpret the result
+E5. Create an `stl` decomposition of `co2` with `plot(stl(co2, "periodic"))`, and try to interpret the result
 ```{r}
 plot(stl(co2, "periodic"))
 ```
-6. Use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above with dataset `airquality`)
-7. As an alternative to skipping missing values, use `zoo::na.approx` to linearly interpolate them in cases of gaps, and repeat the last exercise.
+E6. Use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above with dataset `airquality`)
+E7. As an alternative to skipping missing values, use `zoo::na.approx` to linearly interpolate them in cases of gaps, and repeat the last exercise.
