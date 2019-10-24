@@ -1,4 +1,4 @@
-# Analysis of spatio-temporal data, WS 2018/9, Oct 7
+# Analysis of spatio-temporal data, WS 2019/20, Oct 21
 
 ```{r echo=FALSE}
 knitr::opts_chunk$set(collapse = TRUE)
@@ -242,3 +242,12 @@ auto.arima(oz)
 * we can fit known seasonalities using e.g. Holt-Winters models, or stl ("seasonal, trend and irregular components using loess")
 * we can identify periodicities by using harmonic analysis
 
+
+## Exercises
+
+1. generate a random series with white noise added to a second order trend, as was done above; fit an ARIMA model to it using `forecast::auto.arima`, and verify discuss whether the model choses is in accordance to the process you simulated
+1. repeat this, but make the second order (parabolic) component so small that it is hardly visible; use again `auto.arima` again and discuss the outcome.
+1. use `forecast::auto.arima` to the `co2` time series, and interpret the resulting model and coefficients; do read into the documentation for parameter `seasonal`.
+1. repeat this, but switching the fitting of a seasonal component off
+1. create an stl decomposition of `co2` with `plot(stl(co2, "periodic"))`, and try to interpret the result
+1. use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above)
