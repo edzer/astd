@@ -559,12 +559,13 @@ auto.arima(oz)
 <h2>Exercises</h2>
 
 <ol>
-<li>generate a random series with white noise added to a second order trend, as was done above; fit an ARIMA model to it using <code>forecast::auto.arima</code>, and verify discuss whether the model choses is in accordance to the process you simulated</li>
-<li>repeat this, but make the second order (parabolic) component so small that it is hardly visible; use again <code>auto.arima</code> again and discuss the outcome.</li>
-<li>use <code>forecast::auto.arima</code> to the <code>co2</code> time series, and interpret the resulting model and coefficients; do read into the documentation for parameter <code>seasonal</code>.</li>
-<li>repeat this, but switching the fitting of a seasonal component off</li>
-<li>create an stl decomposition of <code>co2</code> with <code>plot(stl(co2, &quot;periodic&quot;))</code>, and try to interpret the result</li>
-<li>use the dataset <code>air</code>, obtained by <code>data(air, package = &quot;spacetime&quot;)</code>; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above)</li>
+<li>Generate a random series with white noise added to a second order trend, as was done above; choose and fit an ARIMA model to it using <code>forecast::auto.arima</code>, and verify (discuss) whether the model chosen is in accordance to the process you simulated.</li>
+<li>Repeat this, but make the second order (parabolic) component so small that it is hardly visible in a plot; use <code>auto.arima</code> again and discuss the outcome.</li>
+<li>Use <code>forecast::auto.arima</code> to choose and fit an ARIMA model to the <code>co2</code> time series, interpret the resulting model and coefficients; do read into the documentation of parameter <code>seasonal</code> to find out what an sar[x] parameter refers to.</li>
+<li>Repeat this, but switch off the fitting of a seasonal component.</li>
+<li>Create an <code>stl</code> decomposition of <code>co2</code> with <code>plot(stl(co2, &quot;periodic&quot;))</code>, and try to interpret the result</li>
+<li>Use the dataset <code>air</code>, obtained by <code>data(air, package = &quot;spacetime&quot;)</code>; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above with dataset <code>airquality</code>)</li>
+<li>As an alternative to skipping missing values, use <code>zoo::na.approx</code> to linearly interpolate them in cases of gaps, and repeat the last exercise.</li>
 </ol>
 
 </body>

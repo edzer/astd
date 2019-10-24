@@ -245,9 +245,10 @@ auto.arima(oz)
 
 ## Exercises
 
-1. generate a random series with white noise added to a second order trend, as was done above; fit an ARIMA model to it using `forecast::auto.arima`, and verify discuss whether the model choses is in accordance to the process you simulated
-1. repeat this, but make the second order (parabolic) component so small that it is hardly visible; use again `auto.arima` again and discuss the outcome.
-1. use `forecast::auto.arima` to the `co2` time series, and interpret the resulting model and coefficients; do read into the documentation for parameter `seasonal`.
-1. repeat this, but switching the fitting of a seasonal component off
-1. create an stl decomposition of `co2` with `plot(stl(co2, "periodic"))`, and try to interpret the result
-1. use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above)
+1. Generate a random series with white noise added to a second order trend, as was done above; choose and fit an ARIMA model to it using `forecast::auto.arima`, and verify (discuss) whether the model chosen is in accordance to the process you simulated.
+1. Repeat this, but make the second order (parabolic) component so small that it is hardly visible in a plot; use `auto.arima` again and discuss the outcome.
+1. Use `forecast::auto.arima` to choose and fit an ARIMA model to the `co2` time series, interpret the resulting model and coefficients; do read into the documentation of parameter `seasonal` to find out what an sar[x] parameter refers to.
+1. Repeat this, but switch off the fitting of a seasonal component.
+1. Create an `stl` decomposition of `co2` with `plot(stl(co2, "periodic"))`, and try to interpret the result
+1. Use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above with dataset `airquality`)
+1. As an alternative to skipping missing values, use `zoo::na.approx` to linearly interpolate them in cases of gaps, and repeat the last exercise.

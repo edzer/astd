@@ -11,7 +11,7 @@ knit:
 view:
 	google-chrome docs/$(FILE).html
 
-www:
+push:
 	#scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
 	cp *html docs
 	git add docs/*
