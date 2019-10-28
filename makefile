@@ -1,4 +1,4 @@
-FILE	= lec1a
+FILE	= lec4
 
 all:
 	vi $(FILE).Rmd

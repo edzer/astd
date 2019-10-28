@@ -67,6 +67,7 @@ plot(spectrum(ns))
 smoothed spectrum:
 
 ```{r}
+plot(s1+s2+rnorm(n), type = 'l')
 plot(spectrum(s1+s2+rnorm(n), spans = c(3,5)))
 ```
 
