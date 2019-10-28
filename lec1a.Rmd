@@ -274,5 +274,21 @@ E5. Create an `stl` decomposition of `co2` with `plot(stl(co2, "periodic"))`, an
 ```{r}
 plot(stl(co2, "periodic"))
 ```
+
 E6. Use the dataset `air`, obtained by `data(air, package = "spacetime")`; compute the autocorrelation function and partial autocorrelation function for the first air quality station (omitting missing values as was done above with dataset `airquality`)
+
+```{r}
+data(air, package = "spacetime")
+station1 = na.omit(air[1,])
+acf(station1)
+pacf(station1)
+```
+
 E7. As an alternative to skipping missing values, use `zoo::na.approx` to linearly interpolate them in cases of gaps, and repeat the last exercise.
+
+```{r}
+library(zoo)
+station1a = na.approx(air[1,])
+acf(station1a)
+pacf(station1a)
+```
