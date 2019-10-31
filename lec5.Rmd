@@ -22,9 +22,9 @@ grd = expand.grid(x = sq, y = sq)
 icov = exp(-as.matrix(dist(grd))/300)
 set.seed(13333)
 grd$z = t(rnorm(100) %*% chol(icov))
-library(sp)
-coordinates(grd) = ~x+y
-spplot(grd)
+library(sf)
+grd = st_as_sf(grd, coords = c("x", "y"))
+plot(grd)
 ```
 
 Suppose we are interested in the correlation of two neigbhouring locations. A difficult way would be to form a matrix of z, and shift it right and up:
