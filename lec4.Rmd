@@ -111,12 +111,30 @@ E1. Generate a saw pattern, e.g. by
 ```{r}
 saw = 1:1000 %% 50
 plot(saw, type = 'l', asp = 1)
+saw.ts = ts(saw, frequency = 50)
+spectrum(saw)
+spectrum(saw.ts)
+# what we see is called harmonics
+s = stl(co2, s.window = 12)
+sp = spectrum(s$time.series[,"seasonal"])
 ```
 
 * compute and plot a spectrum of this series
 * describe and explain what you see
 * compare this to what you saw in the spectrum of the periodic component of the `co2` dataset
 
-E2. In the PM10 data we looked at last week (`data(air, package = "spacetime")`), investigate whether there is a weekly or monthly cyclic trend present in the time series for the first station.
+E2. In the PM10 data we looked at last week (`data(air, package = "spacetime")`), investigate whether there is a weekly, monthly or yearly cyclic trend present in the time series for the first station.
+```{r}
+data(air, package = "spacetime")
+station1 = air[1,]
+station1.clean = zoo::na.approx(station1)
+spectrum(station1.clean, spans = c(3,3))
+spectrum(ts(station1.clean, frequency = 7), spans = c(3,3))
+abline(v = 1, col = 'red')
+spectrum(ts(station1.clean, frequency = 365.25/12), spans = c(3,3))
+abline(v = 1, col = 'red')
+spectrum(ts(station1.clean, frequency = 365.25), spans = c(3,3))
+abline(v = 1, col = 'red')
+```
 
 E3. From http://pebesma.staff.ifgi.de/pm10/ download the first dataset, and import it in R. Examine the spectrum, autocorrelation function and partial autocorrelation function of the PM10 variable measured. Is this a regular time series?
