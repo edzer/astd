@@ -104,3 +104,19 @@ remainder = s$time.series[,3]
 plot(remainder)
 plot(spectrum(remainder))
 ```
+
+## Exercises
+
+E1. Generate a saw pattern, e.g. by
+```{r}
+saw = 1:1000 %% 50
+plot(saw, type = 'l', asp = 1)
+```
+
+* compute and plot a spectrum of this series
+* describe and explain what you see
+* compare this to what you saw in the spectrum of the periodic component of the `co2` dataset
+
+E2. In the PM10 data we looked at last week (`data(air, package = "spacetime")`), investigate whether there is a weekly or monthly cyclic trend present in the time series for the first station.
+
+E3. From http://pebesma.staff.ifgi.de/pm10/ download the first dataset, and import it in R. Examine the spectrum, autocorrelation function and partial autocorrelation function of the PM10 variable measured. Is this a regular time series?
