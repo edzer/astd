@@ -30,6 +30,7 @@ set.seed(13333)
 grd$z = t(rnorm(100) %*% chol(icov))
 library(sf)
 grd = st_as_sf(grd, coords = c("x", "y"))
+grd
 plot(grd, pch = 16)
 ```
 
