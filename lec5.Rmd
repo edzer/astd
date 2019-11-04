@@ -13,6 +13,12 @@ We also ask different questions to these data:
 * lattice data: are neighbouring regions spatially correlated? (How) can we run regression models on them, taking into account the spatial correlation?
 
 
+## Simulating multivariate normals
+
+For a univariate random variable $X$ with distribution $N(\mu, \sigma^2)$, the distribution of $a + bX$ is $N(\mu + a, b^2\sigma^2)$. Similarly, for a multivariate random vector $X = (x_1, x_2, ..., x_n) \sim N(\mu, \Sigma)$ with covariance matrix $\Sigma$ having element $(i,j)$ in $\Sigma$ equal to $\mbox{Cov}(x_i, x_j)$, we have 
+$$A + XB \sim N(A+B'\mu, B'\Sigma B)$$
+A linear transformation of a mean zero standard normal independent ($N(0,I)$) matrix then has $N(A, BB')$. If our target covariance $\Sigma=BB'$, we can find $B$ as the [choleski decomposition](https://en.wikipedia.org/wiki/Cholesky_decomposition) of $\Sigma$.
+
 ## geostatistical data.
 
 Suppose we have spatial data, distributed over a 10 x 10 grid, with spacing 100 m:
@@ -24,7 +30,7 @@ set.seed(13333)
 grd$z = t(rnorm(100) %*% chol(icov))
 library(sf)
 grd = st_as_sf(grd, coords = c("x", "y"))
-plot(grd)
+plot(grd, pch = 16)
 ```
 
 Suppose we are interested in the correlation of two neigbhouring locations. A difficult way would be to form a matrix of z, and shift it right and up:
@@ -37,7 +43,7 @@ plot(pts2, asp=1, main = "lag-1 (100 m) scatter plot of z")
 
 Where clearly we see the lag-1 correlation, which in this case is a spatial correlation! We could go on like this for lag-2, lag-3 etc, but then we would miss diagonal directions:
 ```{r fig=TRUE}
-plot(sort(as.vector(spDists(grd))))
+plot(sort(as.vector(st_distance(grd))))
 ```
 
 We can get a larger set of scatterplots, grouped by spatial distance intervals, when using gstat::hscat (lagged scatterplots):
