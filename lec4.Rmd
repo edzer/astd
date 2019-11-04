@@ -138,3 +138,14 @@ abline(v = 1, col = 'red')
 ```
 
 E3. From http://pebesma.staff.ifgi.de/pm10/ download the first dataset, and import it in R. Examine the spectrum, autocorrelation function and partial autocorrelation function of the PM10 variable measured. Is this a regular time series?
+
+```{r}
+pm10 = read.csv("http://pebesma.staff.ifgi.de/pm10/3_1a.txt")
+head(pm10)
+spectrum(pm10$pm10)
+acf(pm10$pm10, 100)
+pacf(pm10$pm10)
+pm10$tm = as.POSIXct(strptime(paste(as.character(pm10$Date), as.character(pm10$Time)), "%Y/%m/%d %H:%M:%OS"))
+head(pm10)
+table(diff(pm10$tm))
+````
