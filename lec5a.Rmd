@@ -3,12 +3,12 @@
 ### Variogram, covariogram, auto-correlogram
 
 ```{r, fig=TRUE}
-library(sp)
-demo(meuse, ask = FALSE) # load meuse dataset
+library(sf)
+demo(meuse_sf, ask = FALSE) # load meuse dataset
 library(gstat)
 hist(meuse$zinc)
 hist(log(meuse$zinc))
-plot(variogram(log(zinc)~1, meuse))
+plot(variogram(log(zinc)~1, meuse_sf))
 ```
 
 How can we relate the variogram to the autocorrelogram?
@@ -21,26 +21,26 @@ The variogram and covariogram relate through
 $$\gamma(h) = C(0) - C(h)$$
 with $C(h)$ the covariogram of the process:
 ```{r fig=TRUE}
-plot(variogram(log(zinc)~1, meuse, covariogram = TRUE))
+plot(variogram(log(zinc)~1, meuse_sf, covariogram = TRUE))
 ```
 
 ### What to choose as lag distance?
 ```{r fig=TRUE}
-plot(variogram(log(zinc)~1, meuse))
-plot(variogram(log(zinc)~1, meuse, width = 50))
-plot(variogram(log(zinc)~1, meuse, width = 250))
+plot(variogram(log(zinc)~1, meuse_sf))
+plot(variogram(log(zinc)~1, meuse_sf, width = 50))
+plot(variogram(log(zinc)~1, meuse_sf, width = 250))
 ```
 
 All still somewhat acceptible; things get weirder when
 ```{r fig=TRUE}
-plot(variogram(log(zinc)~1, meuse, width = 20))
-plot(variogram(log(zinc)~1, meuse, width = 500))
+plot(variogram(log(zinc)~1, meuse_sf, width = 20))
+plot(variogram(log(zinc)~1, meuse_sf, width = 500))
 ```
 
 ### Variogram model
 For further analysis, we need a variogram _model_, a parametric model $\gamma(h)$ that gives semivariance (and hence: covariance, autocorrelation) values for _every_ value of $h$:
 ```{r}
-v = variogram(log(zinc)~1, meuse)
+v = variogram(log(zinc)~1, meuse_sf)
 f = fit.variogram(v, vgm(1, "Sph", 300, 1))
 plot(v, f)
 f
@@ -73,21 +73,25 @@ does have this property for points in 1, but not in 2 or more dimensions!
 * R can deal with this automatically, but you need to tell it!
 
 ```{r}
-meuse.ll = spTransform(meuse, CRS("+proj=longlat +datum=WGS84"))
-plot(variogram(log(zinc)~1, meuse.ll), main = "distance in km!!")
-proj4string(meuse.ll) = as.character(NA)
-plot(variogram(log(zinc)~1, meuse.ll), main = "distance units ?????")
+meuse_ll = st_transform(meuse_sf, "+proj=longlat +datum=WGS84")
+plot(variogram(log(zinc)~1, meuse_ll), main = "distance in km!!")
+st_crs(meuse_ll) = NA # remove CRS
+plot(variogram(log(zinc)~1, meuse_ll), main = "distance units ?????")
 ```
 
 More in detail:
 ```{r}
 (pts = rbind(c(0,0), c(1,0), c(0,1)))
 as.matrix(dist(pts))
-sp::spDists(pts, longlat = FALSE)
-sp::spDists(pts, longlat = TRUE)
+df = data.frame(pts)
+names(df) = c("x", "y")
+st_distance(st_as_sf(df, coords = c("x", "y"), crs = NA))
+st_distance(st_as_sf(df, coords = c("x", "y"), crs = "+proj=longlat"))
 (pts_here = rbind(c(7,52), c(8,52), c(7,53)))
-sp::spDists(pts_here, longlat = FALSE)
-sp::spDists(pts_here, longlat = TRUE)
+df_here = data.frame(pts_here)
+names(df_here) = c("x", "y")
+st_distance(st_as_sf(df_here, coords = c("x", "y"), crs = NA))
+st_distance(st_as_sf(df_here, coords = c("x", "y"), crs = "+proj=longlat"))
 ```
 
 Note that:
@@ -98,8 +102,8 @@ Note that:
 * R adopts this order: 1. longitude, 2. latitude (think: x, y)
 
 ```{r}
-sp::spDists(pts_here[,c(1,2)], longlat = FALSE)
-sp::spDists(pts_here[,c(2,1)], longlat = FALSE)
-sp::spDists(pts_here[,c(1,2)], longlat = TRUE)
-sp::spDists(pts_here[,c(2,1)], longlat = TRUE)
+st_distance(st_as_sf(df_here, coords = c("x", "y"), crs = NA))
+st_distance(st_as_sf(df_here, coords = c("y", "x"), crs = NA))
+st_distance(st_as_sf(df_here, coords = c("x", "y"), crs = "+proj=longlat"))
+st_distance(st_as_sf(df_here, coords = c("y", "x"), crs = "+proj=longlat"))
 ```
