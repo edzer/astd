@@ -64,18 +64,64 @@ and copy-and-paste.
 
 E1. Import one of the pm10 trajectories from http://pebesma.staff.ifgi.de/pm10/ using `read.csv`
 
+```{r}
+pm = read.csv("http://pebesma.staff.ifgi.de/pm10/3_1a.txt")
+```
+
 E2. Load package `sf` and use `st_as_sf` to convert this into an `sf` object, using argument `coords`; pay attention to the order of coordinates, and set `crs=4326` to specify longlat
 
-E3. Convert to EPSG 32633 (UTM zone 33N), using `st_transform`
+```{r}
+library(sf)
+pm.sf = st_as_sf(pm, coords = c("Long", "Lat"), crs = 4326)
+```
+
+E3. Convert to EPSG 32632 (UTM zone 32N), using `st_transform`
+
+```{r}
+pm.sf_utm = st_transform(pm.sf, 32632)
+```
 
 E4. Load package `gstat` and compute a variogram of the pm10 variable, with maximum distance 300 m
 
+```{r}
+library(gstat)
+v = variogram(pm10 ~ 1, pm.sf_utm, cutoff = 300)
+plot(v)
+```
+
 E5. Fit a variogram model to this, using `vgm(1, "Exp", 100, 1))` as the initial fit; save the fitted model
 
+```{r}
+v.fit = fit.variogram(v, vgm(1, "Exp", 100, 1))
+v.fit
+plot(v, v.fit)
+```
+
 E6. Load package `stars` and compute a regular grid over the area, by first converting the `st_bbox` of your data to an `sfc` polygon using `st_as_sfc`, and then `st_as_stars` of that polygon.
+```{r}
+plot(pm.sf_utm["pm10"])
+pol = st_as_sfc(st_bbox(pm.sf_utm))
+plot(pol)
+plot(pm.sf_utm["pm10"], add = TRUE)
+grd = st_as_stars(pol)
+plot(grd)
+grd
+```
 
 E7. Carry out a kriging using formula `pm10~1` (constant mean model), the (transformed) data, the grid, and the fitted model
 
+```{r}
+kr = krige(pm10~1, pm.sf_utm, grd, v.fit)
+```
+
 E8. Plot the resulting kriging predictions, and try to plot the observation (pm10) points on top of it
+```{r}
+plot(kr[1], breaks = "equal", reset = FALSE)
+# plot(st_geometry(pm.sf_utm), add = TRUE, col = 'red', pch = 3, cex = 0.5)
+```
 
 E9. Plot the resulting kriging variances
+
+```{r}
+plot(kr[2], breaks = "equal")
+```
