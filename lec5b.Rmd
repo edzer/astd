@@ -59,3 +59,23 @@ edit(vignette("gstat"))
 ```
 
 and copy-and-paste.
+
+## Exercises
+
+E1. Import one of the pm10 trajectories from http://pebesma.staff.ifgi.de/pm10/ using `read.csv`
+
+E2. Load package `sf` and use `st_as_sf` to convert this into an `sf` object, using argument `coords`; pay attention to the order of coordinates, and set `crs=4326` to specify longlat
+
+E3. Convert to EPSG 32633 (UTM zone 33N), using `st_transform`
+
+E4. Load package `gstat` and compute a variogram of the pm10 variable, with maximum distance 300 m
+
+E5. Fit a variogram model to this, using `vgm(1, "Exp", 100, 1))` as the initial fit; save the fitted model
+
+E6. Load package `stars` and compute a regular grid over the area, by first converting the `st_bbox` of your data to an `sfc` polygon using `st_as_sfc`, and then `st_as_stars` of that polygon.
+
+E7. Carry out a kriging using formula `pm10~1` (constant mean model), the (transformed) data, the grid, and the fitted model
+
+E8. Plot the resulting kriging predictions, and try to plot the observation (pm10) points on top of it
+
+E9. Plot the resulting kriging variances
