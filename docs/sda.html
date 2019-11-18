@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>&ldquo;Spatial data in R&rdquo;</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h1>&ldquo;Spatial data in R&rdquo;</h1>
+
+<h2>Formulas</h2>
+
+<p>Last week we ran into formulas. These are an important semantic tool in R. They </p>
+
+<ul>
+<li>specify models (or relationships) between variables, .</li>
+<li>have a form of <code>y~x1+x2</code>, with <code>y</code> the dependent, and <code>x1</code> and <code>x2</code> independent variables</li>
+<li>carry an environment, which may hold the data of the variables</li>
+</ul>
+
+<pre><code class="r">f = function() {
+    x = 1:3
+    y = c(4,3,5)
+    y ~ x
+}
+form = f()
+str(form)
+</code></pre>
+
+<pre><code>## Class &#39;formula&#39;  language y ~ x
+##   ..- attr(*, &quot;.Environment&quot;)=&lt;environment: 0x561e5a0b87b0&gt;
+</code></pre>
+
+<pre><code class="r">plot(form, col = &#39;red&#39;, pch = 16) # plot.formula method
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
+
+<p>Their most typical use pattern is where you call a function with as first argument the formula, and as second argument an object (often a <code>data.frame</code>) where the formula symbols are resolved.</p>
+
+<pre><code class="r"># using built-in dataset mtcars:
+names(mtcars)
+</code></pre>
+
+<pre><code>##  [1] &quot;mpg&quot;  &quot;cyl&quot;  &quot;disp&quot; &quot;hp&quot;   &quot;drat&quot; &quot;wt&quot;   &quot;qsec&quot; &quot;vs&quot;   &quot;am&quot;   &quot;gear&quot;
+## [11] &quot;carb&quot;
+</code></pre>
+
+<pre><code class="r">plot(mpg~cyl, mtcars) # uses the plot.formula method
+m1 = lm(mpg~cyl, mtcars) # simple linear regression
+abline(m1)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/></p>
+
+<pre><code class="r">m1
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)          cyl  
+##      37.885       -2.876
+</code></pre>
+
+<pre><code class="r">lm(mpg~cyl+disp, mtcars) # multiple linear regression
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = mpg ~ cyl + disp, data = mtcars)
+## 
+## Coefficients:
+## (Intercept)          cyl         disp  
+##    34.66099     -1.58728     -0.02058
+</code></pre>
+
+<p>In these cases, the variables are resolved in the data.frame, not in the environment of the formula. This has two advantages:</p>
+
+<ul>
+<li>we can create arbitrary, data-transforming expressions in formulas, and</li>
+<li>we can manipulate the dataset as a whole, e.g. by replacing it or building subsets</li>
+</ul>
+
+<pre><code class="r">lm(sqrt(mpg) ~ cyl, subset(mtcars, disp &gt; 120))
+</code></pre>
+
+<pre><code>## 
+## Call:
+## lm(formula = sqrt(mpg) ~ cyl, data = subset(mtcars, disp &gt; 120))
+## 
+## Coefficients:
+## (Intercept)          cyl  
+##      5.8341      -0.2432
+</code></pre>
+
+<p>Using R this way falls under so-called <em>non-standard evaluation</em> (NSE):</p>
+
+<ul>
+<li><code>mpg</code> is not a data object when used in the formula, it is resolved later</li>
+<li>expression <code>disp &gt; 120</code> also only works <em>in the context</em> of <code>mtcars</code></li>
+<li><strong>tidyverse</strong> has made NSE into a game of its own; some people like it, others don&#39;t.</li>
+</ul>
+
+<h2>Spatial data in R</h2>
+
+<p>&hellip; has a long history, about as old as R (and going back into the S-Plus days)</p>
+
+<ul>
+<li>for finding relevant packages two <a href="https://cran.r-project.org/web/views/">CRAN task views</a> are relevant:
+
+<ul>
+<li>spatial task view</li>
+<li>spatiotemporal task view</li>
+</ul></li>
+<li>two new-ish packages for handling spatial data are
+
+<ul>
+<li><strong>sf</strong>: see this article: <a href="https://journal.r-project.org/archive/2018/RJ-2018-009/index.html">https://journal.r-project.org/archive/2018/RJ-2018-009/index.html</a></li>
+<li><strong>stars</strong>: for raster data, and spatial or spatiotemporal raster and vector data cubes see the &ldquo;articles&rdquo; tab at its <a href="https://r-spatial.github.io/stars/">pkgdown site</a></li>
+</ul></li>
+<li>the &ldquo;classic&rdquo; packages that these &ldquo;replace&rdquo; are <strong>sp</strong>, <strong>rgeos</strong>, <strong>rgdal</strong> (sf) and <strong>raster</strong> (although <code>stars</code> is only partially meant as a <code>raster</code> replacement)</li>
+<li>we will discuss handling of e.g. weather model data and satellite imagery to further motivate <code>stars</code></li>
+<li>spatiotemporal data that are not (well) represented by these packages are
+
+<ul>
+<li>spatial point patterns</li>
+<li>movement / trajectory data</li>
+</ul></li>
+<li>for a modern treatment, see e.g. the (unfinished) book <a href="https://www.r-spatial/book">https://www.r-spatial/book</a></li>
+</ul>
+
+<h2>Coordinate reference systems</h2>
+
+<p>Also see my talk at the Spatial Data Science Conference 2019: <a href="https://edzer.github.io/sdsc19/#1">slides</a>, <a href="https://www.youtube.com/watch?v=boTJibt14Q8&amp;feature=youtu.be">video</a></p>
+
+<p>Coordinate reference systems express how coordinates relate to places on the Earth. This is a complex problem.</p>
+
+<p>Part of the complexity is the need for a <em>datum</em>: a parametric model of the Earth, usually formed by an ellipsoid (a flattened sphere). Such a datum (e.g., WGS84 of a fixed version)</p>
+
+<ul>
+<li>does not follow the Earth&#39;s surface</li>
+<li>does not follow, but tries to fit the geoid, a surface with equal gravity (think: &ldquo;mean sea level&rdquo;)</li>
+<li>fits either globally (like WGS84) at the cost of fitting locally, or fits locally at the cost of being different from everything else</li>
+</ul>
+
+<p>The key (Number 1) issue is to recognize whether coordinates are geographic/geodesic (unit: degrees), or projected (unit: m or km or similar) meaning two-dimensionsal. Projected always means <em>projected from a reference ellipsoid</em>, so needs knowledge about the datum too.</p>
+
+<ul>
+<li>Going from projected to the reference ellipsoid and back (<em>coordinate conversion</em>) is typically lossless,</li>
+<li>Going from one datum to another (<em>datum transformation</em>) typically involves approximation</li>
+</ul>
+
+<p>More about this in the reference systems course.</p>
+
+<h2>PROJ (Formerly: Proj.4)</h2>
+
+<ul>
+<li>Originally developed by USGS&#39; Gerald Evenden, in the 80s</li>
+<li>Purpose: mapping (countries, continents, world), support for popular projections</li>
+<li>Became Proj.4 when it reached version 4, and stayed there for a couple of decades</li>
+<li>Frank Warmerdam (GDAL) picked it up, and added WGS84 (+towgs84=) support</li>
+<li>Used in most OSGEO projects (GDAL, PostGIS, QGIS, &hellip;)</li>
+<li>With Proj version 5 released in 2018, the project was renamed into PROJ</li>
+<li>is now strongly aligned with <a href="http://docs.opengeospatial.org/is/12-063r5/12-063r5.html">OGC WKT2</a> activity</li>
+<li>recent versions will give WKT CRS descriptions preference over PROJ4-strings</li>
+<li>recent versions no longer pivot through WGS84 for <em>any</em> projection, but may allow for various conversion/transformation paths, with different precisions (you will see this e.g. in QGIS)</li>
+</ul>
+
+<pre><code class="r">library(sf)
+</code></pre>
+
+<pre><code>## Linking to GEOS 3.7.1, GDAL 2.4.2, PROJ 5.2.0
+</code></pre>
+
+<pre><code class="r">crs = st_crs(4326) # longlat WGS84
+crs # shows proj4string
+</code></pre>
+
+<pre><code>## Coordinate Reference System:
+##   EPSG: 4326 
+##   proj4string: &quot;+proj=longlat +datum=WGS84 +no_defs&quot;
+</code></pre>
+
+<pre><code class="r">cat(st_as_text(crs, pretty = TRUE), &quot;\n&quot;) # show WKT representation
+</code></pre>
+
+<pre><code>## GEOGCS[&quot;WGS 84&quot;,
+##     DATUM[&quot;WGS_1984&quot;,
+##         SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,
+##             AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],
+##         AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],
+##     PRIMEM[&quot;Greenwich&quot;,0,
+##         AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],
+##     UNIT[&quot;degree&quot;,0.0174532925199433,
+##         AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],
+##     AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]
+</code></pre>
+
+<pre><code class="r">cat(st_as_text(st_crs(3857), pretty = TRUE), &quot;\n&quot;) # web Mercator
+</code></pre>
+
+<pre><code>## PROJCS[&quot;unnamed&quot;,
+##     GEOGCS[&quot;unnamed ellipse&quot;,
+##         DATUM[&quot;unknown&quot;,
+##             SPHEROID[&quot;unnamed&quot;,6378137,0],
+##             EXTENSION[&quot;PROJ4_GRIDS&quot;,&quot;@null&quot;]],
+##         PRIMEM[&quot;Greenwich&quot;,0],
+##         UNIT[&quot;degree&quot;,0.0174532925199433]],
+##     PROJECTION[&quot;Mercator_2SP&quot;],
+##     PARAMETER[&quot;standard_parallel_1&quot;,0],
+##     PARAMETER[&quot;central_meridian&quot;,0],
+##     PARAMETER[&quot;false_easting&quot;,0],
+##     PARAMETER[&quot;false_northing&quot;,0],
+##     UNIT[&quot;Meter&quot;,1],
+##     EXTENSION[&quot;PROJ4&quot;,&quot;+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext +no_defs&quot;]]
+</code></pre>
+
+</body>
+
+</html>

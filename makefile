@@ -1,4 +1,4 @@
-FILE	= lec5b
+FILE	= sda
 
 all:
 	vi $(FILE).Rmd

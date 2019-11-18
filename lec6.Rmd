@@ -91,11 +91,6 @@ spbdry <- readOGR(".", "spbdry")
 spsrc <- readOGR(".", "spsrc")
 sproads <- readOGR(".", "sproads")
 
-```
-
-```{r}
-setwd("../astd")
-
 plot(spbdry, axes=TRUE, lwd=0.5)
 plot(sproads, add=TRUE, lwd=2, col="darkslategrey")
 c_c <- (spasthma$Asthma == "case") + 1
