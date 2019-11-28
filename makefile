@@ -1,4 +1,4 @@
-FILE	= sda
+FILE	= no2
 
 all:
 	vi $(FILE).Rmd
