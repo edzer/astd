@@ -1,55 +1,80 @@
 # Spatial Point Patterns
 
-Recommended reading: _Statistical Analysis of Spatial Point Processes_, chapter 7 in _Applied Spatial Data Analysis with R, second edition_ ; Springer (2013).
+Recommended reading: 
 
-Very nice slides from a point process expert are found [here](http://www.icms.org.uk/downloads/spat_eco/illian.pdf); Illian is also first author of [this book](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470014911.html)
+* _Statistical Analysis of Spatial Point Processes_, 
+* chapter 7 in _Applied Spatial Data Analysis with R, second edition_ ; Springer (2013).
+* [Statistical Analysis and Modelling of Spatial Point Patterns](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470014911.html) Dr. Janine Illian, Prof. Antti Penttinen, Dr. Helga Stoyan, Dietrich Stoyan
 
-Spatial Point Pattern analysis is concerned with describing the
-distribution of points in space; usually a 2-D Euclidian (metric)
-space is assumed.
+Spatial Point Pattern analysis is concerned with 
+
+* describing the distribution of points (a _pattern_) in space; 
+* makeing inference about the _process_ that (could have) generated this pattern
+
+Usually a 2-D Euclidian (metric) space is assumed:
+
+```{r}
+library(sf)
+demo(nc, ask = FALSE, echo = FALSE) # load nc
+pts = st_centroid(nc)
+library(maptools) # contains the Spatial -> spatstat routines
+library(spatstat)
+as.ppp(as(pts, "Spatial"))
+```
 
 Over a give window $W$, we observe a number of $n$ events (points)  $S_i$, $i=1,...n$.
 
 We distinguish:
 
-* a point pattern: the observed locations of events in their window
-* a point process: the stochastic process that generates point pattern as its outcome
+* a point _pattern_: the observed locations of events in their window
+* a point _process_: the stochastic process that generates point pattern as its outcome
 
 We can describe:
 
-* first order properties: concerning the density of the events (is the density of the point pattern constant over the window?)
-* second order properties: concerning the interaction between events (do events attract each other, repulse each other, or act indifferently with respect to each other?)
+* first order properties: concerning the **density** of the events (is the density of the point pattern constant over the window?)
+* second order properties: concerning the **interaction** between events (do events attract each other, repulse each other, or act indifferently with respect to each other?)
 
-The baseline process is _completely spatial random_ (CRS): it means that the density of the process is constant, and points occur completely independently, meaning there is no interaction.
+The baseline process is _completely spatial random_ (CSR): 
+
+* the density of the process is constant, and 
+* points occur completely independently, meaning there is no interaction.
 
 Testing for constant density can be done with the quadrat counts test:
+
 * our point pattern has $N$ events
-* cut the area in n boxes of equal size
+* cut the area in $n$ boxes of equal size
+* under CSR, the _expected_ number of points per box is then $N/n$
 * count the number of events per box, $n_i$
 * the sum of $(n_i - N/n)^2$ follows a $\chi^2$ distribution with $n-1$ degrees of freedom under the null hypothesis of CSR
+
 Other tests involve e.g. distances between points.
 
 Caveats:
+
 * how to determine $n$?
 * can we get equally sized boxes in real cases?
 * as usual: not significant does not mean that the process _is_ CSR, it can also indicate lack of power (small sample)
 
 Alternatives to CSR: 
+
 * attracting or repulsing processes, constant density (e.g. Strauss)
 * no interaction process, varying density (log Gaussian Cox process)
 
 Software:
+
 * spatial: [spatstat](https://spatstat.github.io/) (JSS papers :[1](http://www.jstatsoft.org/v12/i06/), [2](http://www.jstatsoft.org/v55/i11/))
 * spatio-temporal: CRAN: [stpp](https://cran.r-project.org/package=stpp) [JSS paper](https://www.jstatsoft.org/article/view/v053i02); [lgcp](https://cran.r-project.org/web/packages/lgcp/) JSS papers: [1](http://www.jstatsoft.org/v52/i04/), [2](http://www.jstatsoft.org/v63/i07/)
 
 Typical spatio-temporal questions involve whether the density (if varying) varies over time in a way that is independent from the variation over space. In case of an epidemics, movement of the epidemic would imply interaction (FMD examples in the stpp package/paper).
 
 Functions:
+
 * K-function (Ripley's K): the average number of other points found within the distance $r$ from the typical point.
 * L-function: similar to K, but CSR is a line rather than a parabolic curve
 * g-function: (pair-correlation function); recommended by Illian et al., similar to L and K but $g(r) = 1$  for CSR cases
 
 Inference:
+
 * inference often follows a simulation approach: point patterns are simulated given a particular process, and the correspondence of the (set of) simulations to the observed processed is considered.
 
 ```{r}
