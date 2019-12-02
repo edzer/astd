@@ -50,7 +50,7 @@ Testing for constant density can be done with the quadrat counts test:
 * cut the area in $n$ boxes of equal size
 * under CSR, the _expected_ number of points per box is then $N/n$
 * count the number of events per box, $q_i$
-* under the null hypothesis of CSR, $\sum_{i=1}{n}(q_i - N/n)^2$ now follows a $\chi^2$ distribution with $n-1$ degrees of freedom 
+* under the null hypothesis of CSR, $\sum_{i=1}^{n}(q_i - N/n)^2$ now follows a $\chi^2$ distribution with $n-1$ degrees of freedom 
 
 In case you are unfamiliar with what $\chi^2$ is, an approximate permutation test involves
 
