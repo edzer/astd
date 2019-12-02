@@ -1,3 +1,8 @@
+
+```{r, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
+
 # Spatial Point Patterns
 
 Recommended reading: 
@@ -44,8 +49,14 @@ Testing for constant density can be done with the quadrat counts test:
 * our point pattern has $N$ events
 * cut the area in $n$ boxes of equal size
 * under CSR, the _expected_ number of points per box is then $N/n$
-* count the number of events per box, $n_i$
-* the sum of $(n_i - N/n)^2$ follows a $\chi^2$ distribution with $n-1$ degrees of freedom under the null hypothesis of CSR
+* count the number of events per box, $q_i$
+* under the null hypothesis of CSR, $\sum_{i=1}{n}(q_i - N/n)^2$ now follows a $\chi^2$ distribution with $n-1$ degrees of freedom 
+
+In case you are unfamiliar with what $\chi^2$ is, an approximate permutation test involves
+
+* generate a large ($>1000$) number of independent CSR patterns of size $N$ over the target region (`spatstat::runifpoint`)
+* compute $\sum_{i=1}{n}(q_i - N/n)^2$ for each of them, and take the 95-percentile of them
+* compare the test statistic with it; is it larger, then we reject the CSR hypothesis with 95% confidence
 
 Other tests involve e.g. distances between points.
 
@@ -108,43 +119,20 @@ names(dpp)<-c("x", "y", "DATASET")
 library(lattice)
 print(xyplot(y~x|DATASET, data=dpp, pch=19, aspect=1))
 
-setwd("./asdar")
-
-library(rgdal)
-spasthma <- readOGR(".", "spasthma")
-spbdry <- readOGR(".", "spbdry")
-spsrc <- readOGR(".", "spsrc")
-sproads <- readOGR(".", "sproads")
-
-plot(spbdry, axes=TRUE, lwd=0.5)
-plot(sproads, add=TRUE, lwd=2, col="darkslategrey")
-c_c <- (spasthma$Asthma == "case") + 1
-plot(spasthma[c_c == 1,], add=TRUE, pch=4, cex=0.6, col="mediumaquamarine")
-plot(spasthma[c_c == 2,], add=TRUE, pch=17, cex=0.75, col="goldenrod2")
-plot(spsrc, pch=22, add=TRUE, cex=1.2, bg="brown4")
-legend("bottomright", legend=c("controls", "cases", "pollution sources"), pch=c(4, 17, 22), pt.cex=c(0.6, 0.75, 1.2), pt.bg=c(NA, NA, "brown4"), col=c("mediumaquamarine", "goldenrod2", "black"), bty="n") 
-
-
-## envjap <- envelope(as(spjpines1, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
-## envred <- envelope(as(spred, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
-## envcells <- envelope(as(spcells, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
-## Gresults <- rbind(envjap, envred, envcells) 
-## Gresults <- cbind(Gresults, 
-##    y=rep(c("JAPANESE", "REDWOOD", "CELLS"), each=length(r)))
+envjap <- envelope(as(spjpines1, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
+envred <- envelope(as(spred, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
+envcells <- envelope(as(spcells, "ppp"), fun=Gest, r=r, nrank=2, nsim=99)
+Gresults <- rbind(envjap, envred, envcells) 
+Gresults <- cbind(Gresults, 
+y=rep(c("JAPANESE", "REDWOOD", "CELLS"), each=length(r)))
 ## # CHANGED DATASET TO y RSB
 ## #	save(Gresults, envjap, envred, envcells, file="sppaGestEnv.RData")
 
 
 ###################################################
-### code chunk number 20: sppa.Rnw:559-560
-###################################################
-#cat("%", difftime(Sys.time(), tic, units="secs"), "seconds\n\n")
-
-
-###################################################
 ### code chunk number 21: sppa.Rnw:562-563
 ###################################################
-load("Gresults.RData")
+#load("Gresults.RData")
 
 print(xyplot(obs~theo|y , data=Gresults, type="l", 
 xlab = "theoretical", ylab = "observed", # EJP
@@ -156,5 +144,32 @@ panel=function(x, y, subscripts) {
 llines(x, y, col="black", lwd=2)
 }))
 
+```
 
+## density:
+
+```{r}
+plot(density(as.ppp(spred)), axes=TRUE)
+points(as.ppp(spred), col="green2", pch=19)
+```
+
+## K-functions, homogeneous, inhomogeneous
+
+```{r}
+opar <- par(mfrow=c(1,2))
+plot(envelope(as.ppp(spred), Kest, verbose=FALSE), main="Homogeneous")
+plot(envelope(as.ppp(spred), Kinhom, verbose=FALSE), main="Inhomogeneous")
+```
+
+```{r}
+plot(density(as.ppp(spred)), axes=TRUE)
+points(as.ppp(spred), col="green2", pch=19)
+plot(density(as.ppp(spred), adjust = 0.5), axes=TRUE,  main = "0.5 x the default bandwidth")
+points(as.ppp(spred), col="green2", pch=19)
+```
+
+```{r}
+opar <- par(mfrow=c(1,2))
+plot(envelope(as.ppp(spred), Kest, verbose=FALSE), main="Homogeneous")
+plot(envelope(as.ppp(spred), Kinhom, adjust = 0.5, verbose=FALSE), main="Inhomogeneous")
 ```
