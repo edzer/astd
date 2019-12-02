@@ -7,9 +7,9 @@ knitr::opts_chunk$set(collapse = TRUE)
 
 Recommended reading: 
 
-* _Statistical Analysis of Spatial Point Processes_, 
 * chapter 7 in _Applied Spatial Data Analysis with R, second edition_ ; Springer (2013).
 * [Statistical Analysis and Modelling of Spatial Point Patterns](http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470014911.html) Dr. Janine Illian, Prof. Antti Penttinen, Dr. Helga Stoyan, Dietrich Stoyan
+* Spatial Point Patterns: methodology and applications with R. Badelley, Rubak, Turner. (The spatstat book) http://spatstat.org/
 
 Spatial Point Pattern analysis is concerned with 
 
