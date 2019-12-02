@@ -48,15 +48,15 @@ Testing for constant density can be done with the quadrat counts test:
 
 * our point pattern has $N$ events
 * cut the area in $n$ boxes of equal size
-* under CSR, the _expected_ number of points per box is then $N/n$
-* count the number of events per box, $q_i$
-* under the null hypothesis of CSR, $\sum_{i=1}^{n}(q_i - N/n)^2$ now follows a $\chi^2$ distribution with $n-1$ degrees of freedom 
+* under CSR, the _Expected_ number of points per box is then $E_i = N/n$
+* count the number of _Observed_ events per box, $O_i$
+* under the null hypothesis of CSR, $G = \sum_{i=1}^{n}\frac{(O_i - E_i)^2}{E_i}$ now follows a $\chi^2$ distribution with $n-1$ degrees of freedom 
 
 In case you are unfamiliar with what $\chi^2$ is, an approximate permutation test involves
 
-* generate a large ($>1000$) number of independent CSR patterns of size $N$ over the target region (`spatstat::runifpoint`)
-* compute $\sum_{i=1}{n}(q_i - N/n)^2$ for each of them, and take the 95-percentile of them
-* compare the test statistic with it; is it larger, then we reject the CSR hypothesis with 95% confidence
+* generate a large ($>1000$) number of independent CSR patterns of size $N$ over the target region (`spatstat::runifpoint`), and consider them observed,
+* compute $G$ for each of them, and take the 95-percentile of these $G$ values
+* compare the test statistic from the real observed pattern: is it larger than this percentile, we can reject the CSR hypothesis with 95% confidence
 
 Other tests involve e.g. distances between points.
 
