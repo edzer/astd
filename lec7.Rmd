@@ -1,31 +1,6 @@
-# assignment; areal/lattice data
-
-## assignment WS 2018/19
-
-The assignment is to carry out a spatio-temporal analysis on a
-dataset of your choice, using one of the methods that we dealt with
-during the course so far, or another (after approval), and report
-on this.
-
-The report shall:
-
-* deal with a problem that is solved by analysing spatiotemporal data
-* have 1000-2000 words of free text (i.e., excluding the script)
-* be structured like a short scientific report (introduction, data, methods, results, discussion and conclusion, list of references)
-* state in the introduction clearly the research question (or hypothesis)
-* the reference list shall include at least three pieces of related work
-* each of the works listed in the references shall be referred to in the main text
-* be written in scientific style
-* be kept simple
-* the analysis shall be part of the text flow, figures (and/or tables) shall support the discussion and conclusions, and shall not be suppressed on output
-
-The report must be submitted as a single .zip file with 
-
-* the report in an R-Markdown file (or similar), 
-* the data used, 
-* the final form (either html or pdf)
-
-The report shall be reproducible based on the included .Rmd file and the material in the .zip file.
+```{r, echo=FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = TRUE)
+```
 
 ## Areal / lattice data.
 
@@ -44,16 +19,55 @@ Examples include:
 
 Problems include:
 
-* estimate proportions or risks from count data
+* estimate proportions or risks from count data: 
+    * assess whether there are (contiguous) _areas_ with elevated risk
+    * if this is the case, find correlations with other variables
 * areal interpolation: interpolate (downscale/upscale) the observed values to some other units, that are hierchically related to the current areal units (e.g. landsat/modis, change of administrative regions, integration of health and census data)
 * evaluating models (testing hypothesis) expressed as $y = X\beta + e$, where either $y$ and/or $e$ exhibit autocorrelation
-
 
 Typical analysis (see R package `spdep`) follows a path:
 
 * build, and evaluate a spatial weight matrix (based on neighbours, or distance, or both)
 * test for spatial correlation using Moran's I
 * give significant spatial correlation, build models that account for that
+
+```{r fig.width=12,fig.height=12}
+library(sf)
+data(pol_pres15, package="spDataLarge")
+head(pol_pres15[, c(1, 4, 6)])
+library(spdep)
+p = poly2nb(pol_pres15)
+plot(st_geometry(pol_pres15), border = 'grey')
+plot(p, st_centroid(st_geometry(pol_pres15)), pch = 3, cex = .2, add = TRUE)
+```
+
+Finding queen neighbours using sf:
+```{r}
+st_queen <- function(a, b = a) st_relate(a, b, pattern = "F***T****")
+as.nb.sgbp <- function(x, ...) {
+  attrs <- attributes(x)
+  x <- lapply(x, function(i) { if(length(i) == 0L) 0L else i } )
+  attributes(x) <- attrs
+  class(x) <- "nb"
+  x
+}
+nb_sf_q <- as.nb.sgbp(st_queen(pol_pres15))
+nb_q <- poly2nb(pol_pres15, queen=TRUE)
+all.equal(nb_q, nb_q, check.attributes=FALSE)
+```
+
+Moran's I:
+$$
+I = \frac{n \sum_{(2)} w_{ij} z_i z_j}{S_0 \sum_{i=1}^{n} z_i^2}
+$$
+where $x_i, i=1, \ldots, n$ are $n$ observations on the numeric variable of interest, $z_i = x_i - \bar{x}$, $\bar{x} = \sum_{i=1}^{n} x_i / n$, $\sum_{(2)} = \stackrel{\sum_{i=1}^{n} \sum_{j=1}^{n}}{i \neq j}$, $w_{ij}$ are the spatial weights, and $S_0 = \sum_{(2)} w_{ij}$. 
+
+First we test a random variable using the Moran test, here under the normality assumption (argument `randomisation=FALSE`, default `TRUE`):
+
+```{r}
+x <- rnorm(nrow(pol_pres15))
+(mt <- moran.test(x, nb2listw(nb_q), randomisation=FALSE))
+```
 
 Models used:
 * simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1)
