@@ -31,6 +31,9 @@ Typical analysis (see R package `spdep`) follows a path:
 * test for spatial correlation using Moran's I
 * give significant spatial correlation, build models that account for that
 
+
+The following is heavily inspired by Ch 17 and 18 of https://r-spatial.org/book .
+
 ```{r fig.width=12,fig.height=12}
 library(sf)
 data(pol_pres15, package="spDataLarge")
@@ -68,10 +71,44 @@ First we test a random variable using the Moran test, here under the normality a
 x <- rnorm(nrow(pol_pres15))
 (mt <- moran.test(x, nb2listw(nb_q), randomisation=FALSE))
 ```
+The test variable is $Z(I)=(I-E(I))/\sqrt{(Var(I))}$, which is standard normally distributed under the $H_0$ of spatial independence.
+
+Now try a real variable
+```{r}
+plot(pol_pres15["I_turnout"])
+moran.test(pol_pres15$I_turnout, nb2listw(nb_q), randomisation=FALSE)
+```
+Alternatively, we could use a randomisation to compute $Var(I)$:
+```{r}
+moran.test(pol_pres15$I_turnout, nb2listw(nb_q), randomisation=TRUE)
+```
+
+or use a permutation test:
+```{r}
+moran.mc(pol_pres15$I_turnout, nb2listw(nb_q), nsim = 999)
+```
+
+
+In case we are curious whether this could be a trend in northing and easting, we could try
+```{r}
+cc = st_coordinates(st_centroid(pol_pres15))
+pol_pres15$x = cc[,1]
+pol_pres15$y = cc[,2]
+lm.morantest(lm(I_turnout~x+y, pol_pres15), nb2listw(nb_q))
+```
+
+```{r}
+library(spatialreg)
+(e1 = errorsarlm(I_turnout~x+y, pol_pres15, nb2listw(nb_q)))
+summary(e1)
+(e2 = errorsarlm(I_turnout~types, pol_pres15, nb2listw(nb_q)))
+summary(e2)
+```
 
 Models used:
-* simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1)
-* conditional autoregressive models (asdar 2nd ed, 9.4.1.2)
+
+* simultaneous autoregressive models (asdar 2nd ed, 9.4.1.1; spatial data science Ch 18)
+* conditional autoregressive models (asdar 2nd ed, 9.4.1.2; spatial data science Ch 18)
 
 Useful spdep vignettes:
 
