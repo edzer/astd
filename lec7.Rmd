@@ -126,7 +126,7 @@ More modern approaches, using R-INLA:
 ## Produc data
 
 Load the produc dataset by
-```{r, eval = FALSE}
+```{r}
 # get US state delineations:
 library(maps) 
 states.m = map('state', plot=FALSE, fill=TRUE)
@@ -145,6 +145,25 @@ plot(Produc86)
 
 * What does variable `gsp` mean in this dataset?
 * Is this variable spatially correlated?
+
+```{r}
+library(spdep)
+nb = poly2nb(Produc86, queen = TRUE)
+moran.test(Produc86$gsp, nb2listw(nb))
+```
+
 * How would you describe the temporal variability of `gsp` for the state `CALIFORNIA`, and is this variable temporally correlated?
+
+```{r}
+Produc.ca = subset(Produc, state == "CALIFORNIA")
+plot(gsp ~ year, Produc.ca)
+acf(Produc.ca$gsp)
+plot(residuals(lm(gsp~year, Produc.ca)))
+acf(residuals(lm(gsp~year, Produc.ca)))
+```
+
 * compute a spatial error model for the year 1986, where you regress 
 public capital stock on gross state product, and discuss the results.
+```{r}
+# do this on Monday
+```
