@@ -120,3 +120,31 @@ Useful spdep vignettes:
 More modern approaches, using R-INLA:
 
 * [Spatial Data Analysis with R-INLA with Some Extensions](https://www.jstatsoft.org/article/view/v063i20)
+
+# Exercises
+
+## Produc data
+
+Load the produc dataset by
+```{r, eval = FALSE}
+# get US state delineations:
+library(maps) 
+states.m = map('state', plot=FALSE, fill=TRUE)
+IDs <- sapply(strsplit(states.m$names, ":"), function(x) x[1])
+library(maptools)
+states = map2SpatialPolygons(states.m, IDs=IDs)
+# get the Produc dataset from plm:
+library(plm)
+data(Produc)
+# convert into sf object:
+library(sf)
+Produc86 = subset(Produc, year == 1986)
+st_geometry(Produc86) = st_as_sfc(states[-8])
+plot(Produc86)
+```
+
+* What does variable `gsp` mean in this dataset?
+* Is this variable spatially correlated?
+* How would you describe the temporal variability of `gsp` for the state `CALIFORNIA`, and is this variable temporally correlated?
+* compute a spatial error model for the year 1986, where you regress 
+public capital stock on gross state product, and discuss the results.
