@@ -55,6 +55,8 @@ Why not exactly 5 days?
 * the orbit is sun synchronous, since reflected sunlight is measured
 * since swath width is constant, close to the poles we get more overlapping swaths than close to the equator, and hence more frequent observations
 
+For combining tiles that do not line up (mosaic, warp) into a regular raster, package [gdalcubes](https://cran.r-project.org/web/packages/gdalcubes/index.html) can be used.
+
 ## Data cubes
 
 See also [this](https://keen-swartz-3146c4.netlify.com/raster.html) chapter.
