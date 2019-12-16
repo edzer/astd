@@ -57,6 +57,8 @@ Why not exactly 5 days?
 
 ## Data cubes
 
+See also [this](https://keen-swartz-3146c4.netlify.com/raster.html) chapter.
+
 Data cubes are data structures where values are arranged at the junction of
 two (one) or more _independent dimensions_. These dimensions can reflect
 (discretized version) of continuous variables (e.g. three space dimension, one
@@ -72,10 +74,11 @@ Examples include:
 * time series for a set of stations (2-dimensional: location, time -> measurement)
 * satellite image (3-dimensional: x, y, color -> pixel value)
 * sequence of satellite images (4-dimensional: x, y, t, color -> pixel value)
+* weather or climate data (5-dimensional: x, y, z, t, attribute -> value)
 
 Data cubes can be sparse or dense: if they are dense, every combination of dimension values has an actual value (in the database, or the memory object); if they are sparse, only combinations for which there is a data value are stored. Systems for sparse data cubes are relatively rare, an example is [SciDB](https://www.paradigm4.com/try_scidb/).
 
-The [stars](https://github.com/r-spatial/stars) R package implements dense vector and raster data cubes. See the data model vignette (article) for an explanation of the different forms it accepts.
+The [stars](https://github.com/r-spatial/stars) R package implements dense **vector and raster data cubes**. See the data model vignette (article) for an explanation of the different forms it accepts.
 
 Satellite imagery like Sentinel2 can be seen as sparse data cubes: since the satellites follow a path, a particular observed tile has its own time stamp, and all other tiles will be empty for that time stamp. Also, collections of tiles over different UTM systems do not form a (single) regular grid in x and y.
 
