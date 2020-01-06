@@ -1,3 +1,15 @@
+# Inference
+
+* inference is the act of trying to draw conclusions beyond mere observations
+* it involves adopting assumptions, either about
+    * the _sampling_ process (e.g., data was collected completely at random)
+	* the process (e.g., the time series, or spatial process, is second order stationary)
+* conclusion from inference can never be _certain_ (think: climate change,
+human impact on); this means that they need to be accompanied by probability
+statements ("it is very likely that" indicates, in IPCC terms, 90-100% probability;
+see e.g. table 1 in: https://www.ipcc.ch/site/assets/uploads/2017/08/AR5_Uncertainty_Guidance_Note.pdf ),
+or take the form of hypothesis testing: we _rejected_ the null hypothesis with 99% confidence.
+
 # Movement
 
 Movement is an inherently spatio-temporal phenomenon: position
@@ -24,6 +36,8 @@ Movement data may come from direct, or indirect sources.
 * indirect: e.g. from video footage or wind fields: object tracking
    - identify objects (overlap, shade)
    - track them through imagery / raster maps (satellite imagery)
+
+* should movement data be stored as a set of time-stamped fixes, or a set of two-point, time-stamped, duration stamped, "steps" as elementary units? See [here](https://github.com/mablab/sftraj-proposal/issues/1) for a discussion between proponents of both.
 
 ## Types of movement
 

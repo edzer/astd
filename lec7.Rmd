@@ -166,4 +166,9 @@ acf(residuals(lm(gsp~year, Produc.ca)))
 public capital stock on gross state product, and discuss the results.
 ```{r}
 # do this on Monday
+names(Produc86)
+e = errorsarlm(pcap~gsp, Produc86, nb2listw(nb))
+summary(e)
+e_alt = lm(pcap~gsp, Produc86)
+summary(e_alt)
 ```
