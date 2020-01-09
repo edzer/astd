@@ -1,4 +1,4 @@
-FILE	= lec8
+FILE	= assignment
 
 all:
 	vi $(FILE).Rmd
