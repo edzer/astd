@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-<title>Analysis of spatio-temporal data, WS 2019/2020</title>
+<title>hello markdown</title>
 
 <script type="text/javascript">
 window.onload = function() {
@@ -57,9 +57,6 @@ var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/<
 hljs.initHighlightingOnLoad();
 </script>
 
-<!-- MathJax scripts -->
-<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
-</script>
 
 
 <style type="text/css">
@@ -204,127 +201,13 @@ hr {
 </head>
 
 <body>
-<h1>Analysis of spatio-temporal data, WS 2019/2020</h1>
+<h1>hello markdown</h1>
 
-<h1>Tour the table:</h1>
-
-<p>please share:</p>
-
-<ul>
-<li>who you are, where you are from, and what kind of BSc program you did</li>
-<li>your prior experience with data analysis: what kind of data, what kind of analysis</li>
-<li>your expectations and hopes for this class</li>
-</ul>
-
-<h1>Goals of this course</h1>
-
-<p>For the participants to develop</p>
-
-<ul>
-<li>an idea about which types of spatio-temporal data there are, what kind of questions we can ask to these data, and how these data can be analysed</li>
-<li>hands-on experience with some of these analysis methods</li>
-<li>experience with common difficulties found in real world datasets</li>
-<li>software skills for analysing spatio-temporal data</li>
-<li>skills to make analyses reproducible, and communicate these</li>
-</ul>
-
-<h1>Course schedule:</h1>
-
-<p>The course will this year mostly focus on the book <a href="https://spacetimewithr.org/">Spatio-Temporal Statistics with R</a>, which is freely available (in pdf form) on-line. The labs are also online.</p>
-
-<p>Thursday sessions will devoted to the labs corresponding to the chapters discussed on Monday. I assume that students will have tried out the labs <em>before</em> the Thursday meeting, and bring their results (success or failure!) to class, where we will share screens.</p>
-
-<ol>
-<li>Nov 2 Intro session; Nov 5 running R, running the book labs</li>
-<li>Nov 9 Ch 1, 2.1 - 2.3</li>
-<li>Nov 16 Ch 2.4</li>
-<li>Nov 23 Ch 3.1 - 3.2 + first assignment</li>
-<li>Nov 30 Ch 3.3 - 3.5</li>
-<li>Dec 7 Ch 4.3 - 4.4</li>
-<li>Dec 14 Ch 5.1 - 5.2</li>
-<li>Dec 21 Ch 5.3 - 5.5 + winter assignment</li>
-<li>Jan 11 Ch 6.1 - 6.3</li>
-<li>Jan 18 Spatial point patterns and movement data</li>
-<li>Jan 25</li>
-<li>Feb 1</li>
-<li>Feb 8 Final assignment presentation of preliminary results; (final assignment hand in: last week of March).</li>
-</ol>
-
-<h1>Introduction</h1>
-
-<ol>
-<li>What are spatiotemporal data? (is it spatio-temporal or spatiotemporal?)</li>
-<li>What is involved in data analysis?</li>
-<li>How do we analyse data?</li>
-<li>What is data science? Is geoinformatics a data science?</li>
-<li>What is <a href="https://www.r-project.org/">R</a>? </li>
-<li>Why do we use 
-
-<ul>
-<li>R?</li>
-<li><a href="http://rmarkdown.rstudio.com/">R-markdown</a>?</li>
-<li><a href="http://rstudio.com/">rstudio</a>?</li>
-</ul></li>
-</ol>
-
-<h1>1. Time series</h1>
-
-<ol>
-<li>What characterizes time series data? When is data <em>not</em> time series data?</li>
-<li>Which different types of time series data can you think of?</li>
-</ol>
-
-<h1>2. Exercise:</h1>
-
-<h2>Oct 12 (unsupervised):</h2>
-
-<p>For those <em>unfamiliar</em> with R (note that this is a lot of work!):</p>
-
-<ol>
-<li>Start R</li>
-<li>Open <a href="http://www.r-project.org/">http://www.r-project.org/</a> in a browser</li>
-<li>Browse to Documentation: Manuals</li>
-<li>Open: An Introduction to R (base R)</li>
-<li>Work your way through chapters 1-9. (base R)</li>
-<li>Alternative: <a href="https://moderndive.com/1-getting-started.html">ModernDive: getting started with R</a> (tidyverse)</li>
-<li>Alternative: <a href="http://r4ds.had.co.nz/">R for data science</a> (tidyverse)</li>
-</ol>
-
-<p>For the following data:</p>
-
-<pre><code class="r">x = c(1,2,4,5)
-y = c(2,1,5,4)
-data.frame(x,y)
+<pre><code class="r">rnorm(5)
 </code></pre>
 
-<pre><code>##   x y
-## 1 1 2
-## 2 2 1
-## 3 4 5
-## 4 5 4
+<pre><code>## [1]  0.07625391  1.12532523 -0.70380645 -0.37618228 -0.28843318
 </code></pre>
-
-<pre><code class="r">plot(x,y)
-</code></pre>
-
-<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
-
-<h2>Review/refresher questions:</h2>
-
-<ol>
-<li>How is the mean for a random variable \(X\) defined?</li>
-<li>Give the equation for covariance between two variables \(x\) and \(y\)</li>
-<li>Give the equation for correlation between two variables \(x\) and \(y\)</li>
-<li>For the samples \(x\) and \(y\), compute the sample mean, the variance and the standard deviation </li>
-<li>Draw the data in a scatter plot (by hand)</li>
-<li>From the table above, compute the covariance between \(x\) and \(y\), and the correlation between \(x\) and \(y\)</li>
-<li>Suppose \(x\) is a time series data, and the rows indicating the time index. Compute the lag 0, lag 1 and lag 2 autocorrelations of \(x\).</li>
-<li>What is the general equation of an autoregressive AR(p) process?</li>
-<li>What is the general equation of a moving average MA(q) process?</li>
-<li>Up to which lag is an AR(p) process correlated?</li>
-<li>Up to which lag is a MA(q) process correlated?</li>
-<li>What can be said about partial correlations of an AR(2) process?</li>
-</ol>
 
 </body>
 

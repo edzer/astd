@@ -1,37 +1,47 @@
 # Analysis of spatio-temporal data, WS 2019/2020
 
+# Tour the table:
+
+please share:
+
+* who you are, where you are from, and what kind of BSc program you did
+* your prior experience with data analysis: what kind of data, what kind of analysis
+* your expectations and hopes for this class
+
 # Goals of this course
 
 For the participants to develop
 
-* an idea about which types of spatio-temporal data there are, and how they can be analysed
+* an idea about which types of spatio-temporal data there are, what kind of questions we can ask to these data, and how these data can be analysed
 * hands-on experience with some of these analysis methods
 * experience with common difficulties found in real world datasets
+* software skills for analysing spatio-temporal data
 * skills to make analyses reproducible, and communicate these
 
 
 # Course schedule: 
 
-1. Oct 7: Introduction; Time series: continuity, time lines, events
-1. Oct 14+17: no class
-1. Oct 21: Time series: time domain, autocorrelation, AR, MA
-1. Oct 28: Time series: frequency domain; estimation, forecasting
-1. Nov 4: Spatial processes: spatial correlation, variogram
-1. Nov 11: Simple, ordinary, universal kriging; cokriging, stochastic simulation
-1. Nov 18: Spatio-temporal geostatistics: variograms
-1. Nov 25: Spatio-temporal geostatistics: interpolation and simulation
-1. Dec 2: Point patterns: spatial, temporal, spatio-temporal 
-1. Dec 9: Areal data: estimation
-1. Dec 16: Earth observation data; climate model data
-1. Jan 6: Movement data
-1. Jan 13: project work
-1. Jan 20: project work
-1. Jan 27: project work
+The course will this year mostly focus on the book [Spatio-Temporal Statistics with R](https://spacetimewithr.org/), which is freely available (in pdf form) on-line. The labs are also online.
 
+Thursday sessions will devoted to the labs corresponding to the chapters discussed on Monday. I assume that students will have tried out the labs _before_ the Thursday meeting, and bring their results (success or failure!) to class, where we will share screens.
+
+1. Nov 2 Intro session; Nov 5 running R, running the book labs
+1. Nov 9 Ch 1, 2.1 - 2.3
+1. Nov 16 Ch 2.4
+1. Nov 23 Ch 3.1 - 3.2 + first assignment
+1. Nov 30 Ch 3.3 - 3.5
+1. Dec 7 Ch 4.3 - 4.4
+1. Dec 14 Ch 5.1 - 5.2
+1. Dec 21 Ch 5.3 - 5.5 + winter assignment
+1. Jan 11 Ch 6.1 - 6.3
+1. Jan 18 Spatial point patterns and movement data
+1. Jan 25
+1. Feb 1
+1. Feb 8 Final assignment presentation of preliminary results; (final assignment hand in: last week of March).
 
 # Introduction
 
-1. What is spatiotemporal data?
+1. What are spatiotemporal data? (is it spatio-temporal or spatiotemporal?)
 1. What is involved in data analysis?
 1. How do we analyse data?
 1. What is data science? Is geoinformatics a data science?
@@ -59,13 +69,6 @@ For those *unfamiliar* with R (note that this is a lot of work!):
 1. Work your way through chapters 1-9. (base R)
 1. Alternative: [ModernDive: getting started with R](https://moderndive.com/1-getting-started.html) (tidyverse)
 1. Alternative: [R for data science](http://r4ds.had.co.nz/) (tidyverse)
-
-## Oct 19:
-
-* For Thu Oct 19: bring two different time series data sets to class;
-carry out exploratory statistics on them, using R
-
-## Pen and paper exercises:
 
 For the following data:
 

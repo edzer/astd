@@ -1,4 +1,4 @@
-FILE	= assignment
+FILE	= lec1
 
 all:
 	vi $(FILE).Rmd
@@ -13,7 +13,7 @@ view:
 
 push:
 	#scp lec*html ex_*html epebe_01@ifgifiles.uni-muenster.de:WWW/astd
-	cp *html docs
+	cp -f *html docs
 	git add docs/*
 	git commit -a -m 'update'
 	git push
