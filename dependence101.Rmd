@@ -1,0 +1,215 @@
+---
+title: "Spatiotemporal dependence 101"
+author: "Edzer Pebesma"
+date: "11/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Statistical dependence
+
+What does dependence mean? Roughly: for the state of something (A) we need (the state of) something else (B). Like, in case of financial dependence: "in order to exist (A), I need your money (B)". 
+
+In statistics (or probability theory), two random variables A and B are _independent_ if $Pr(A|B)=Pr(A)$, that is, if the conditional probability distribution of $A$ _given_ $B$ equals the probability distribution of $A$ without knowing $B$. See [here](https://en.wikipedia.org/wiki/Conditional_probability) for a refresher on conditional probability.
+If this is not the case, that is if $Pr(A|B) \neq Pr(A)$, we say that $A$ and $B$ are dependent.
+
+## A regression example.
+
+Consider the following simple example:
+```{r}
+plot(1/mpg~disp, mtcars)
+```
+
+which clearly demonstrates that fuel consumption and displacement are related. We could say they are dependent (leaving in the middle whether displacement _causes_ fuel consumption, or vice versa).
+
+We can compute _linear_ correlation e.g. by
+```{r}
+with(mtcars,  cor(1/mpg,disp))
+```
+
+which indicates there is a quite strong positive correlation: correlations range between -1 and 1, with 1 (-1) indicating a perfect linear ascending (descending) relationship, and 0 no linear relationship (which does not imply: no relationship).
+
+If we are interested in correlation, we can leave it here. If we're interested in predicting fuel usages for a new car for which we only know the displacement, we'd use linear regression:
+
+```{r}
+summary(lm(1/mpg~disp, mtcars))
+```
+and could use the regression line as predictor:
+```{r}
+plot(1/mpg~disp, mtcars)
+abline(lm(1/mpg~disp, mtcars))
+```
+
+We could wonder whether, after taking into account the variability explained by `disp`, regression residuals of this model are still correlated with `disp`. It turns out the aren't:
+```{r}
+e = residuals(lm(1/mpg~disp, mtcars))
+plot(e~disp, mtcars)
+with(mtcars, cor(e, disp))
+```
+This number is _numerically_ identical to zero, and not by coincidence: had there been a non-zero correlation, then we _could_ have improved the regression model to pick this up (meaning the regression model we got would not have been the best possible linear fit).
+
+So we see here:
+
+* when two variables are linearly correlated, this can be expressed by computing their correlation coefficient,
+* if we model the relationship with linear regression, the regression residuals are uncorrelated (_linearly_ independent) from the predictor, by construction
+
+If this is the case, can we say now that residuals are _independent_ from $X$? Independence implies zero (linear) correlation, but the reverse is not true. Independence means that $Pr(e|X) = Pr(e)$; zero correlation merely implies $\mbox{Cov}(e,X)=0$. Of course we don't know $Pr(e|X)$, but we can look at other things.
+
+## Constant variance
+$Pr(e|X)=Pr(e)$ implies that the variance of $e$ is not dependent on e. Is it? We can look at variance e.g. by plotting squared or absolute residuals against X:
+```{r}
+plot(abs(e)~disp, mtcars)
+abline(lm(abs(e)~disp,mtcars))
+summary(lm(abs(e)~disp, mtcars))
+```
+This indicates that the variance of $e$ increases with increasing values of `disp`; this is not surprising when regressing two variables that are strictly positive and vary over orders of magnitude (variance _has_ to decrease when getting closer to zero).
+
+## Serial correlation?
+
+Another question we could ask is whether the observations are _serially_ correlated. An option is to use the Wald-Wolfowitz runs test, which looks
+at _runs_ of data with identical sign: if residuals are serially uncorrelated, their sign flips regularly (but not every time). Having very few sign flips (or very many) is an indication of positive (negative) serial correlation. Suppose we'd fit a straight line to a parabola, we would get residuals with the following sign 
+
+```{r}
+(r = c(rep(1,10), rep(-1,20), rep(1, 10)))
+```
+Doing a runs test on this gives a highly significant result:
+```{r}
+library(randtests)
+runs.test(r)
+```
+For our data:
+```{r}
+runs.test(e)
+```
+we see that the residuals are not significantly serially correlated. 
+
+Serial correlation is often an indication of _model misspecification_; fitting a straight line to a parabola is an example.
+
+## Time series
+
+Consider the Mauna Loa CO2 time series, available as `co2` in R, but we will be downloading an updated version:
+```{r}
+if (!file.exists("co2.txt"))
+	 download.file("ftp://aftp.cmdl.noaa.gov/products/trends/co2/co2_mm_mlo.txt", "co2.txt")
+co2m = read.table("co2.txt", skip = 53, header = FALSE)
+names(co2m) = c("year", "month", "year_dec", "co2_mean", "co2_deseasonalized", "days", "std_days", "uncert_mean")
+head(co2m)
+```
+
+```{r}
+plot(co2_mean ~ year_dec, co2m, type = 'l')
+lines(co2_deseasonalized ~ year_dec, co2m, col = 'red')
+```
+
+As we see, the trend is not entirely linear, and we get serial correlation in regression residuals:
+```{r}
+co2_e = residuals(lm(co2_deseasonalized ~ year_dec, co2m))
+runs.test(co2_e)
+```
+
+```{r}
+co2_ts = ts(co2m$co2_mean, frequency = 12, start = co2m$year_dec[1])
+s = stl(co2_ts, s.window = 7)
+names(s)
+plot(s)
+```
+
+We can get access to the individual components by
+```{r}
+head(s$time.series) # head() selects the first six records:
+```
+and we can look for serial correlation in the `remainder` series by
+```{r}
+runs.test(s$time.series[,"remainder"])
+```
+suggesting a significant temporal correlation. What else can we do? Compute the serial correlation (temporal, autocorrelation):
+```{r}
+acf(s$time.series[,"remainder"])
+```
+
+This reveals the (obvious, trivial) lag-0 autocorrelation of 1, but in addition the interesting, significant lag-1 autocorrelation, and no indications of further positive autocorrelation at short lags. We see significant _negative_ autocorrelations at lag 12 and 24 months (at axis tics 1 = 1 year and 2 = 2 year), which might be artifacts from fitting the periodic component (i.e., a result from model misspecification, or overfitting).
+
+So we see that this co2 time series can be decomposed in
+
+* a smooth, gradual nearly linear trend
+* a cyclic (yearly) effect, very regular but over time slightly changing 
+* a residual ("remainder") that has positive autocorrelation for lag 1 (month-to-month)
+
+## Spatial autocorrelation
+
+We will use the temperature data of STRbook:
+```{r}
+data("NOAA_df_1990", package = "STRbook")
+library(dplyr)
+Tmax <- filter(NOAA_df_1990,        # subset the data
+              proc == "Tmax" &      # only max temperature
+              date == "1993-07-06") # temperature for single time step
+```
+
+```{r}
+library(sf)
+Tmax.sf = st_as_sf(Tmax, coords = c("lon", "lat"), crs = 'OGC:CRS84',
+									remove = FALSE)
+library(gstat)
+v = variogram(z~1, Tmax.sf)
+```
+This _looks_ like spatial correlation (because the semivariance increases with distance), but, as the variogram continues increasing with increasing distance, can it be model misspecificaton?
+```{r}
+plot(Tmax.sf["z"], pch = 16)
+plot(z~lat, Tmax.sf)
+plot(z~lon, Tmax.sf)
+v = variogram(z~lon+lat, Tmax.sf)
+plot(v)
+```
+
+This variogram is computed from the _residuals_ $e(s)$ from the linear model
+$$Z(s) = \beta_0 + \beta_1 Lat(s) + \beta_2 Lon(s) + e(s)$$
+shows a more satisfactory image: semivariance increases with distance, but levels off at some finite distance (distances are in km, using great circle distances computed from geographic coordinates).
+
+## Temporal correlation in Tmax:
+
+```{r}
+Tmax.3804 <- filter(NOAA_df_1990,      # subset the data
+              proc == "Tmax",        # only max temperature
+						  id == 3804) %>%        # single station
+	select(z, date) %>% 
+	arrange(date)
+Tmax.ts = ts(Tmax.3804$z, frequency = 365.25, start = 1990)
+```
+
+So, we can look at temporal autocorrelation (for this station) with
+```{r}
+acf(Tmax.ts)
+```
+
+But what is it: a trend? a seasonal effect? Model misspecification?
+```{r}
+plot(Tmax.ts)
+```
+
+indicates there is a strong seasonal effect. Using e.g. `stl` to decompose:
+```{r}
+Tmax.stl = stl(Tmax.ts, s.window = 30)
+plot(Tmax.stl)
+```
+
+We can now look at the autocorrelation of the remainder:
+```{r}
+acf(Tmax.stl$time.series[,"remainder"])
+```
+
+Where we see
+
+* (the trivial autocorrelation 1 for lag 0)
+* a positive autocorrelation for lags 1...5
+* some weak oscillation that doesn't really extend beyond the significance bars (blue dashed lines)
+
+## Summing up
+
+* for spatial correlation, we typically focus on variograms or covariances
+* variograms are inverted covariances: $\gamma(h) = C(0) - C(h)$
+* for time series we're used to look at autocorrelations
+* (auto) correlations are covariances, scaled to $[-1,1]$.
