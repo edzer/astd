@@ -80,9 +80,9 @@ Doing a runs test on this gives a highly significant result:
 library(randtests)
 runs.test(r)
 ```
-For our data:
+For our data, we'll test for serial correlation of the residuals when they are taken in the order of increasing `disp` values:
 ```{r}
-runs.test(e)
+runs.test(e[order(mtcars$disp)])
 ```
 we see that the residuals are not significantly serially correlated. 
 

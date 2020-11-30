@@ -514,14 +514,14 @@ runs.test(r)</code></pre>
 ## statistic = -5.7665, runs = 3, n1 = 20, n2 = 20, n = 40, p-value =
 ## 8.093e-09
 ## alternative hypothesis: nonrandomness</code></pre>
-<p>For our data:</p>
-<pre class="r"><code>runs.test(e)</code></pre>
+<p>For our data, we’ll test for serial correlation of the residuals when they are taken in the order of increasing <code>disp</code> values:</p>
+<pre class="r"><code>runs.test(e[order(mtcars$disp)])</code></pre>
 <pre><code>## 
 ##  Runs Test
 ## 
-## data:  e
-## statistic = -1.4376, runs = 13, n1 = 16, n2 = 16, n = 32, p-value =
-## 0.1506
+## data:  e[order(mtcars$disp)]
+## statistic = -0.3594, runs = 16, n1 = 16, n2 = 16, n = 32, p-value =
+## 0.7193
 ## alternative hypothesis: nonrandomness</code></pre>
 <p>we see that the residuals are not significantly serially correlated.</p>
 <p>Serial correlation is often an indication of <em>model misspecification</em>; fitting a straight line to a parabola is an example.</p>
