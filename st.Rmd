@@ -1,0 +1,74 @@
+# Data for final assignment
+
+Data can be downloaded from https://uni-muenster.sciebo.de/s/yvFiuWGqG7riliA/download
+
+This is a zip file (of 25 Gb: takes quite a while); unpacked it is not much larger, as
+it contains .tif files.
+
+A script that summarizes the data to 250 m pixels and yearly aggregated (median) NDVI values is:
+
+```{r}
+library(gdalcubes)
+library(magrittr)
+gdalcubes_options(threads=8)
+
+IMAGE_DIR = "L8_cropped" # please change
+
+col = create_image_collection(list.files(IMAGE_DIR, recursive = TRUE, pattern=".tif", full.names  = TRUE), "L8_SR")
+
+# only use "clear" pixels
+L8.clear_mask = image_mask("PIXEL_QA", values=c(322, 386, 834, 898, 1346, 324, 388, 836, 900, 1348), invert = TRUE)
+
+# example yearly data cube at 250m spatial resolution
+v = cube_view(srs="EPSG:3857", extent=col, dx=250, dy=250, dt="P1Y", resampling = "average", aggregation = "median")
+
+# calculate NDVI and export as GeoTIFF files at subfolder "L8cube"
+raster_cube(col, v, L8.clear_mask) %>%
+  select_bands(c("B04", "B05")) %>%
+  apply_pixel("(B05-B04)/(B05+B04)") %>%
+  write_tif("../L8cube",prefix = "NDVI_")
+```
+
+We can read this with package stars, and visualise as:
+
+```{r}
+# remotes::install_github("r-spatial/stars")
+library(stars)
+subdir = "L8cube"
+f = paste0(subdir, "/", list.files(subdir))
+(st = read_stars(f))
+plot(merge(st))
+plot(merge(st), breaks = "equal")
+```
+
+To see the raw (non-aggregated) data, with all the cloud gaps, create a
+composite for a sub-region by
+```{r}
+gdalcubes_options(threads=8)
+
+IMAGE_DIR = "L8_cropped" # please change
+
+col = create_image_collection(list.files(IMAGE_DIR, recursive = TRUE, pattern=".tif", full.names  = TRUE), "L8_SR")
+
+# only use "clear" pixels
+L8.clear_mask = image_mask("PIXEL_QA", values=c(322, 386, 834, 898, 1346, 324, 388, 836, 900, 1348), invert = TRUE)
+
+# example 16 day data cube of a smaller area at 60m spatial resolution
+v = cube_view(srs="EPSG:3857", extent=list(left = -7347259, right = -7314864, top = -995476.1, bottom = -1025490, t0 ="2015-01-01", t1 = "2018-12-31"), dx=60, dy=60, dt = "P16D", resampling = "average", aggregation = "median")
+
+# calculate NDVI and export as GeoTIFF files at subfolder "L8cube_subregion"
+raster_cube(col, v, L8.clear_mask) %>%
+  select_bands(c("B04", "B05")) %>%
+  apply_pixel("(B05-B04)/(B05+B04)") %>%
+  write_tif("L8cube_subregion",prefix = "NDVI_")
+```
+
+And visualise with
+```{r}
+# remotes::install_github("r-spatial/stars")
+library(stars)
+subdir = "L8cube_subregion"
+f = paste0(subdir, "/", list.files(subdir))
+(st = read_stars(f))
+plot(merge(st))
+```
