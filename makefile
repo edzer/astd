@@ -1,11 +1,11 @@
-FILE	= lec1
+FILE	= pp_trajectories
 
 all:
 	vi $(FILE).Rmd
 	make knit
 
 knit:
-	echo "library(knitr); knit2html(\"$(FILE).Rmd\")" | R --save -q
+	Rscript -e 'rmarkdown::render("$(FILE).Rmd")'
 	mv $(FILE).html docs
 
 view:
