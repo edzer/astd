@@ -39,7 +39,7 @@ Thursday sessions will devoted to the labs corresponding to the chapters discuss
 1. Mon Dec 14 Ch 4.4, 5.1, 5.2
 1. Mon Dec 21 Ch 5.3 - 5.5 + winter assignment
 1. Mon Jan 11 Ch 6.1 - 6.3
-1. Mon Jan 18 Spatial point patterns and movement data
+1. Mon Jan 18 Spatial point patterns and movement data (slides: [html](pp_trajectories.html), [Rmd](pp_trajectories.Rmd))
 1. Mon Jan 25
 1. Mon Feb 1
 1. Mon Feb 8 Final assignment presentation of preliminary results; (final assignment hand in: last week of March).
