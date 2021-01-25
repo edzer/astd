@@ -1,0 +1,145 @@
+---
+title: "Spatiotemporal arrays"
+author: "Edzer Pebesma"
+date: "1/25/2021"
+output: html_document
+---
+
+Questions regarding the three papers:
+
+* what is ARD?
+* what is the difference between ARD, data cubes, and image collections?
+* must ARD, or a data cube, have a regular time discretisation?
+* What is a _coverage_, as defined e.g. by OGC in the web coverage service?
+* is an image collection always a coverage?
+* what does the _stack_ method do in the BDC, for temporal aggregation? 
+* why, in the Maus et al. paper, do the authors propose _time-weighted_ dynamic time warping, as opposed to regular dynamic time warping?
+* which other questions came up when you read the paper?
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+###  R's matrix() and image()
+
+```{r}
+m = matrix(1:12, 3, 4)
+m
+image(m)
+```
+
+```{r}
+fortunes::fortune("conventions")
+```
+
+```{r}
+image2 = function(x, ...) {
+    x = t(x) # transpose
+    x = x[,ncol(x):1] # flip
+    image(x, ...)
+}
+image2(m)
+```
+
+```{r}
+n = 25; m = 20
+a = array(runif(n * m), c(n, m))
+dim(a)
+image2(a, asp = 1)
+```
+
+```{r}
+fw = 5 # filter width
+a1 = apply(a, 1, filter, filter = rep(1, fw)/fw)
+image2(a1, asp = 1)
+```
+We applied the filter to the rows of the matrix, but see the correlation appear in the columns of the resulting matrix. This is because `apply` puts the dimension over which we iterated (rows) last, so rows have become colums:
+```{r}
+dim(a1)
+```
+
+We can further process this two get filtering (moving averaging) on the second dimension, which is again rows of `a1`:
+```{r}
+a2 = apply(a1, 1, filter, filter = rep(1, fw)/fw)
+image2(a2, asp = 1)
+dim(a2)
+```
+
+We see that the border two rows and columns are all NA:
+```{r}
+a2[1:5,1:5]
+```
+
+We can also apply functions that erase the dimension, e.g. mean:
+```{r}
+apply(a2, 1, mean, na.rm = TRUE) # row means
+apply(a2, 2, mean, na.rm = TRUE) # column means
+mean(a2, na.rm = TRUE)
+```
+
+### package `stars`
+```{r}
+library(stars)
+m = matrix(1:12, 3, 4)
+m.st = st_as_stars(m)
+plot(m.st)
+```
+```{r}
+str(m.st)
+class(m.st)
+is.list(m.st) # is it a list?
+length(m.st) # how many elemenst has this list?
+class(m.st[[1]]) # what's in its first element?
+dim(m.st[[1]])
+m.st[[1]]
+```
+
+### more dimensions
+
+```{r}
+m = array(1:60, c(3,4,5))
+m
+m.st = st_as_stars(m)
+m.st
+plot(m.st, text_values = TRUE, text_color = 'orange')
+```
+### higher dimensional data:
+```{r}
+dims = c(3,4,5,6,7)
+m = array(seq_len(prod(dims)), dims)
+m.st = st_as_stars(m)
+m.st
+```
+
+
+### real data
+
+```{r}
+tif = system.file("tif/L7_ETMs.tif", package = "stars") # a Landsat-7 image part inside the package
+r = read_stars(tif)
+r
+plot(r)
+```
+
+Note that:
+* `offset`, `delta` and `refsys` allow moving from array index to world coordinates, back and forth
+* the third dimension here refers to spectral bands, this can also be time, or third time + fourth band etc.
+* `point` registers (_can_ register) whether cell values refer to points or areas (support)
+* `values` may give values (e.g. band names, or continuous values if discretisation of the dimensions is _not_ regular)
+* `[x]` and `[y]` indicate which variables map the horizontal (hopefully: x and y) dimensions
+* a "discrete axis" can refer to a set of (unordered) geometries, leading to vector data cubes
+
+Example of a time series, with curvilinear coordinates:
+
+```{r}
+library(dplyr)
+prec_file = system.file("nc/test_stageiv_xyt.nc", package = "stars")
+(prec = read_ncdf(prec_file, curvilinear = c("lon", "lat"), ignore_bounds = TRUE))
+sf::read_sf(system.file("gpkg/nc.gpkg", package = "sf"), "nc.gpkg") %>%
+  st_transform(st_crs(prec)) -> nc # transform from NAD27 to WGS84
+nc_outline = st_union(st_geometry(nc))
+plot_hook = function() plot(nc_outline, border = 'red', add = TRUE)
+prec %>%
+  slice(index = 1:12, along = "time") %>%
+  plot(downsample = c(5, 5, 1), hook = plot_hook)
+```
