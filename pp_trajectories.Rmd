@@ -1,5 +1,5 @@
 ---
-title: "Point Pattersn, Trajectories"
+title: "Point Patterns, Trajectories"
 author: "Edzer Pebesma"
 date: "1/17/2021"
 output: html_document
