@@ -1,0 +1,64 @@
+## visualise with
+```{r}
+# remotes::install_github("r-spatial/stars")
+library(stars)
+subdir = "L8cube_subregion"
+f = paste0(subdir, "/", list.files(subdir))
+st = read_stars(f)
+```
+
+### selecting, using slice:
+```{r}
+x = merge(st)
+x
+library(dplyr)
+x %>% slice("attributes", 5:10)
+x %>% slice("x", 100:200) %>% 
+  slice("y", 200:300) %>%
+  slice("attributes", c(1,5,11,33))
+```
+
+### using `[`
+```{r}
+st[c(1,5,11,33), 100:200, 200:300]
+x[ , 100:200, 200:300, c(1,5,11,33)]
+```
+
+
+```{r}
+x = merge(st)
+labels = st_get_dimension_values(x, "attributes")
+times = substr(labels, 6, 15) %>%
+  strptime("%Y.%m.%d")
+times[1:10]
+diff(times)
+# avoid the DST hell:
+Sys.setenv(TZ="UTC")
+times = substr(labels, 6, 15) %>%
+  strptime("%Y.%m.%d")
+diff(times)
+times = substr(labels, 6, 15) %>%
+  strptime("%Y.%m.%d") %>%
+  as.Date()
+diff(times)
+# change attribute dimension to carry times:
+xt = st_set_dimensions(x, "attributes", values = times, point = TRUE, names = "time")
+xt
+```
+
+## conversion to `xts`
+```{r}
+library(xts)
+m.xts = as.xts(xt)
+```
+
+## Cluster:
+```{r}
+dim(m.xts)
+dim(na.omit(m.xts))
+set.seed(13351)
+k = kmeans(t(na.omit(m.xts)), 5)
+length(k$cluster) #
+st$cluster = as.factor(k$cluster)
+plot(st["cluster"])
+```
