@@ -62,3 +62,28 @@ length(k$cluster) #
 st$cluster = as.factor(k$cluster)
 plot(st["cluster"])
 ```
+
+```{r}
+dim(x)
+fraction_na = function(x) mean(is.na(x))
+na_map = st_apply(x, 1:2, fraction_na)
+plot(na_map)
+na_time = st_apply(x, 3, fraction_na)
+plot(na_time[[1]]~times, type = 'l')
+```
+
+```{r}
+library(zoo)
+nafill = function(x, ...) na.fill(zoo(x), ...)
+na_fill = st_apply(x, 1:2, nafill, fill = 0)
+plot(na_fill)
+```
+```{r}
+na_approx = function(x, ...) as.vector(na.approx(zoo(x), ...))
+# demo:
+na_approx(c(NA,2,NA,3,NA,5,NA), na.rm = FALSE)
+# small 10 x 10 pixel subset, full image takes some time...
+#na_app = st_apply(x[,1:10,1:10], 1:2, na_approx, na.rm = FALSE)
+na_app = st_apply(x, 1:2, na_approx, na.rm = FALSE)
+plot(na_app)
+```
