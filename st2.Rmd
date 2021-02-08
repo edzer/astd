@@ -46,6 +46,22 @@ xt = st_set_dimensions(x, "attributes", values = times, point = TRUE, names = "t
 xt
 ```
 
+## Create set of time instances from attributes
+```{r}
+dates = as.Date(attributes(st)$names, format="NDVI_%Y.%m.%d.tif")
+dates
+diff(dates)
+```
+
+## Create stars object with proper time dimensions
+```{r}
+stNew = st_redimension(st, along = list(time = as.Date(attributes(st)$names,
+                                                       format="NDVI_%Y.%m.%d.tif",
+                                                       tz="UTF")))
+stNew
+```
+
+
 ## conversion to `xts`
 ```{r}
 library(xts)
