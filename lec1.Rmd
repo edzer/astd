@@ -1,4 +1,4 @@
-# Analysis of spatio-temporal data, WS 2019/2020
+# Analysis of spatio-temporal data, WS 2020/2021
 
 # Tour the table:
 
@@ -20,8 +20,9 @@ For the participants to develop
 
 # Course schedule: 
 
-Monday lectures: 12:15 - 13:45.
-Zoom link: see Learnweb
+* Monday lectures: 12:15 - 13:45; Thu exercises 10:15 - 11:45.
+* Zoom link: see Learnweb
+* Below: SDS refers to chapters in https://r-spatial.org/book/
 
 1. Oct 11: Intro: SDS Ch 10; Reproducibility (I)
 1. Oct 18: SDS Ch 11 Point Patterns
