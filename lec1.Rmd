@@ -77,7 +77,7 @@ Some general advice:
 
 For the following data:
 
-```{r}
+```{r eval=FALSE}
 x = c(1,2,4,5)
 y = c(2,1,5,4)
 data.frame(x,y)
@@ -90,12 +90,6 @@ plot(x,y)
 1. Give the equation for covariance between two variables $x$ and $y$
 1. Give the equation for correlation between two variables $x$ and $y$
 1. For the samples $x$ and $y$, compute the sample mean, the variance and the standard deviation 
-1. Draw the data in a scatter plot (by hand)
-1. From the table above, compute the covariance between $x$ and $y$, and the correlation between $x$ and $y$
-1. Suppose $x$ is a time series data, and the rows indicating the time index. Compute the lag 0, lag 1 and lag 2 autocorrelations of $x$.
-1. What is the general equation of an autoregressive AR(p) process?
-1. What is the general equation of a moving average MA(q) process?
-1. Up to which lag is an AR(p) process correlated?
-1. Up to which lag is a MA(q) process correlated?
-1. What can be said about partial correlations of an AR(2) process?
-
+1. Draw the data in a scatter plot (by hand, or using R)
+1. From the data above, compute the covariance between $x$ and $y$, and the correlation between $x$ and $y$
+1. Compute a linear regression of $y$ as a function from $x$
