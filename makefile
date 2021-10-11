@@ -1,4 +1,4 @@
-FILE	= pp_trajectories
+FILE	= lec1
 
 all:
 	vi $(FILE).Rmd
