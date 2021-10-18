@@ -1,0 +1,143 @@
+---
+title: "Point Patterns"
+author: "Edzer Pebesma"
+date: "2021-10-18"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Point Patterns
+
+Some Resources: 
+
+* the [spatstat](https://cran.r-project.org/web/packages/spatstat/index.html) CRAN package; also one of the largest packages of CRAN (CRAN forced it to break up), and its author list is a who-is-who in the point process world.
+* the spatstat book [Spatial Point Patterns: Methodology and Applications with R](http://spatstat.org/book.html), by Baddeley, Rubak and Turner (CRC; around 1000 pages)
+* slides from the spatstat authors: https://spatstat.org/SSAI2017/slides/slides.pdf
+* [_Statistical Analysis and Modelling of Spatial Point Patterns_](https://www.wiley.com/en-ad/Statistical+Analysis+and+Modelling+of+Spatial+Point+Patterns-p-9780470014912), by Illian, Penttinen, Stoyan and Stoyan (Wiley).
+
+### What is a point pattern? 
+
+Examples of point patterns include all kinds of "point-observable" phenomena (objects, or events)
+
+* distribution of trees, cells, stars, cars, people, thunderstorms, lightning strikes, volcano eruptions, earth quakes, plane crashes,  disease cases, accidents, street robberies, and so on. 
+* Note that not all of these examples happen in a "free" 2D space; some are constrained to street ("linear") networks; some others are distributed in 3D space.
+
+A set of locations (two- or three-dimensional, but typically 2D) along with an observation window.
+Points - OK, but why an observation window?
+
+```{r}
+library(sp)
+data(meuse)
+coordinates(meuse) = ~x+y
+par(mfrow = c(1,2))
+plot(meuse)
+title("box observation window")
+box()
+data(meuse.area)
+plot(meuse, xlim = range(meuse.area[,1]))
+title("polygon observation window")
+lines(meuse.area)
+```
+
+On the left, points are _not_ homogeneously distributed over the (box) area. On the right, points are reasonably homogeneously distributed over the study area (polygon). Homogeneity is an important property that a point process may or may not have.
+
+The observation window _implies_ that within this window, we observed all points. Outside the window, there may be more points, but that is not of interest.
+
+The observation window may also be funny shaped: for (normal) cars, it is the street network: effectively a set of connected 1-D elements. Distances then also have to be computed through this network.
+
+For point pattern data, the primary interest lies in _where_ the points happen. Locations between the points are "empty". In contrast, for geostatistical data, the interest lies in _what_ is observed at these points (which values are measured) and what happens between these points (interpolation).  Locations between the observed points are not "empty" but are "unobserved" ("NA"). 
+
+### Point patterns, point processes
+
+Point patterns concerns what we have observed, i.e. properties of the world. The question is how we could describe this, i.e. what kind of mathematical model or _process_ could cause an outcome like the one we observed. We use random processes for this, where the randomness lies in the locations where points occur. At least two important properties describe such processes:
+
+* first order properties ('means'): describes the intensity of the process, $\lambda(s)$ at location $s$. This property discriminates homogeneous from inhomogeneous point processes: a homogeneous point process has a _spatially constant intensity_ $\lambda(s) = \lambda$. For an inhomogeneous point process, intensity $\lambda(s)$ **depends on location**.
+* second order properties ('correlations'): the **interaction** between points: if $s_i$ has a point, is it more likely, less likely, or indifferent for $s_i+h$ (with small $h$) to _also_ have a point? In case it is more likely we see clustered patterns, in case it is less likely we see repulsive patterns. Combinations are also possible (small clusters repulsing each other).
+
+```{r}
+library(spatstat)
+data(japanesepines)
+par(mfrow = c(1, 3), mar = c(1,1,1.2,0))
+plot(japanesepines)
+data(redwoodfull)
+plot(redwoodfull)
+data(cells)
+plot(cells)
+```
+
+```{r}
+data(swedishpines)
+par(mfrow = c(1,2))
+(P <- swedishpines)
+plot(P)
+Q <- quadratcount(P, nx=3, ny=3)
+Q
+plot(Q)
+quadrat.test(P, nx=3, ny=3)
+```
+
+Computing densities:
+
+1. replace each data point by a square of chocolate
+2. melt chocolate with hair dryer
+3. resulting landscape is a kernel smoothed estimate of intensity function
+
+```{r}
+den <- density(P)
+plot(den)
+plot(P, add=TRUE)
+```
+
+Bandwidth determines the amount of smoothing (the duration of melting):
+
+```{r}
+den <- density(P, sigma=30)
+plot(den)
+plot(P, add=TRUE)
+```
+
+
+
+```{r}
+fit <- ppm(P ~x+y)
+lam <- predict(fit)
+plot(lam)
+plot(P, add=TRUE)
+```
+
+### Interactions
+Look, for each point, at the distance to the nearest point, and compare this with what one would expect under CSR (completely spatial random, "pois"):
+
+```{r}
+plot(Gest(P))
+```
+We can check whether the difference between the observed (drawn) and theoretical (under CRS: blue) curve is of significance by simulating 100 CRS processes over the observation window, computing Gest for each, and give the bounds of the observed curves (here: leaving out the first and last), so we get roughly spoken 95% confidence intervals for the curve of the model:
+```{r}
+Penv <- envelope(P, fun=Gest, nrank=2, nsim=99)
+plot(Penv)
+```
+
+For the earlier three examples:
+```{r}
+set.seed(120109)
+envjap <- envelope(japanesepines, fun=Gest, nrank=2, nsim=99)
+envred <- envelope(redwoodfull, fun=Gest, nrank=2, nsim=99)
+envcells <- envelope(cells, fun=Gest, nrank=2, nsim=99)
+par(mfrow = c(1,3))
+plot(envjap)
+plot(envred)
+plot(envcells)
+```
+
+### Marked point patterns
+
+Marked point patterns have properties associated with each point (e.g., tree species, tree size, age of a person). Analysis may focus on the marks, and/or the interaction of marks and locations (do species A and B have different preferences? Do they then to attract or repulse each other? Do large trees occur more often solitary?)
+
+## Spatiotemporal Point Processes
+
+Spatio-temporal point patterns are observed over space-time: each point has a spatial location and a moment of observation. As this concerns points, the moment should not be a (long) period; if it concerns periods, the start of the period can be taken (e.g. by disease cases, when outbreak / infection rate is of interest).
+
+For a spatiotemporal point process, the object (event) is thought of as not moving. If it moves, we call it a trajectory. This will be a later topic in this course.

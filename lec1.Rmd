@@ -25,7 +25,7 @@ For the participants to develop
 * Below: SDS refers to chapters in https://r-spatial.org/book/
 
 1. Oct 11: Intro: SDS Ch 10; Reproducibility (I)
-1. Oct 18: SDS Ch 11 Point Patterns
+1. Oct 18: SDS Ch 11 [Point Patterns](pp.html)
 1. Oct 25: SDS Ch 12 Spatial Interpolation
 1. Nov 1: (holiday) -> Nov 2: Gilberto Camara guest lecture
 1. Nov 8: SDS Ch 13 Spatiotemporal geostatistics
