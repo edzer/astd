@@ -1,4 +1,4 @@
-FILE	= lec1
+FILE	= cubes
 
 all:
 	vi $(FILE).Rmd

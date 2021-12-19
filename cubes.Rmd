@@ -1,0 +1,49 @@
+# what is a data cube?
+
+* what is an `vector`?
+
+```{r}
+(v = runif(10))
+is.vector(v)
+```
+  
+* what is an `array`?
+
+```{r}
+a = array(1:24, c(2, 3, 4))
+is.vector(a)
+dim(a)
+a
+```
+
+# What is beneficial in arrays?
+
+* why don't we store rgb images in a database with records having fields (row, col, color, intensity)?
+* why don't we store videos in a database with records having fields (row, col, frame, color, intensity)?
+* what makes an array different from a database with a set of such records?
+
+# Why "cube"?
+
+* comes from OLAP cube: https://en.wikipedia.org/wiki/OLAP_cube , where time and space are (implicit) present as dimensions!
+* number of dimensions can be larger than 3
+* can the number of dimensions be 2, or 1?
+* number of spatial dimensions: 1 (vector data cube), or 2 or 3 (raster data cube), more
+* is a `data.frame` a data cube?
+* can a `data.frame` hold a data cube?
+
+# is a spatial raster (layer) a data cube?
+
+* what are its necesary properties, compared to a `matrix`?
+* can a `data.frame` hold a raster layer?
+
+# did we use data cubes in this course, so far?
+
+* if so, when?
+
+# what is an image collection?
+
+# how can we create a data cube from an image collection?
+
+* deal with varying CRS
+* sync time: resample, or aggregate?
+* `gdalcubes` https://cran.r-project.org/web/packages/gdalcubes/index.html
