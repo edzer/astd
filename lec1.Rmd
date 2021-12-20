@@ -34,7 +34,7 @@ For the participants to develop
 1. Nov 29: Reproducibility II: ERC (Eftychia Koukouraki)
 1. Dec 6: SDS Ch 16 Spatial Regression
 1. Dec 13: SDS Ch 17 Spatial Econometrics Models
-1. Dec 20: Data Cube Analytics
+1. Dec 20: [Data Cube Analytics](cubes.html)
 1. Jan 10: Analysing Movement data
 1. Jan 17: Prepare Assignment (I)
 1. Jan 24: Prepare Assignment (II)
