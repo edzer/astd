@@ -354,8 +354,8 @@ pre code {
 <li>what is an <code>vector</code>?</li>
 </ul>
 <pre class="r"><code>(v = runif(10))</code></pre>
-<pre><code>##  [1] 0.5280350 0.9927058 0.3713643 0.5974362 0.9067572 0.9838993 0.7521875
-##  [8] 0.1071886 0.8211559 0.5369831</code></pre>
+<pre><code>##  [1] 0.19818042 0.61555920 0.03899388 0.43854751 0.50691160 0.91442393
+##  [7] 0.89909383 0.93623412 0.48151772 0.78553889</code></pre>
 <pre class="r"><code>is.vector(v)</code></pre>
 <pre><code>## [1] TRUE</code></pre>
 <ul>
@@ -423,6 +423,15 @@ is.vector(a)</code></pre>
 <li>if so, when?</li>
 </ul>
 </div>
+<div id="what-are-typical-cube-operations" class="section level1">
+<h1>what are typical cube operations?</h1>
+<ul>
+<li>slice (drop 1 or more dimensions)</li>
+<li>cut / crop (create a sub-cube)</li>
+<li>apply some function to the cube</li>
+<li>reduce dimensions (e.g. compute an index from all bands, or a time series summary)</li>
+</ul>
+</div>
 <div id="what-is-an-image-collection" class="section level1">
 <h1>what is an image collection?</h1>
 </div>
@@ -431,7 +440,20 @@ is.vector(a)</code></pre>
 <ul>
 <li>deal with varying CRS</li>
 <li>sync time: resample, or aggregate?</li>
-<li><code>gdalcubes</code> <a href="https://cran.r-project.org/web/packages/gdalcubes/index.html" class="uri">https://cran.r-project.org/web/packages/gdalcubes/index.html</a></li>
+<li><code>gdalcubes</code> <a href="https://cran.r-project.org/web/packages/gdalcubes/index.html" class="uri">https://cran.r-project.org/web/packages/gdalcubes/index.html</a>
+<ul>
+<li>dimensions: x / y / time / band</li>
+<li>define extent, target resolution for each dimension</li>
+<li>define resampling / aggregation strategy</li>
+<li>optionally define a reducer function while creating the cube</li>
+</ul></li>
+</ul>
+</div>
+<div id="what-about-vector-data-cubes" class="section level1">
+<h1>what about vector data cubes?</h1>
+<ul>
+<li>less familiar, less thought of as “cubes”</li>
+<li>no less useful!</li>
 </ul>
 </div>
 

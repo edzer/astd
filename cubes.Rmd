@@ -40,6 +40,13 @@ a
 
 * if so, when?
 
+# what are typical cube operations?
+
+* slice (drop 1 or more dimensions)
+* cut / crop (create a sub-cube)
+* apply some function to the cube
+* reduce dimensions (e.g. compute an index from all bands, or a time series summary)
+
 # what is an image collection?
 
 # how can we create a data cube from an image collection?
@@ -47,3 +54,12 @@ a
 * deal with varying CRS
 * sync time: resample, or aggregate?
 * `gdalcubes` https://cran.r-project.org/web/packages/gdalcubes/index.html
+    * dimensions: x / y / time / band
+    * define extent, target resolution for each dimension
+	* define resampling / aggregation strategy 
+	* optionally define a reducer function while creating the cube
+
+# what about vector data cubes?
+
+* less familiar, less thought of as "cubes"
+* no less useful!
