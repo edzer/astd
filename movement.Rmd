@@ -1,0 +1,72 @@
+---
+title: "Movement and Trajectories"
+author: "Edzer Pebesma"
+date: "1/10/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Movement, fields, objects
+
+Movement is a very broad concept, of anything that moves, essentially; we will call _trajectories_ the paths of moving _objects_.
+
+Movement is always movement relative to a reference frame, and/or movement relative to other objects. Something that doesn't move in one reference frame may move in another: we think of buildings as not moving, but they move with respect to a global CRS (e.g. WGS84's most recent realisation) due to plate tectonics (other reference frames are bound to a plate), everything on the Earth moves when looked from a (fixed) CRS for the sun.
+
+When we have a field, we can look at movement from [Lagrangian or Eulerian](https://en.wikipedia.org/wiki/Lagrangian_and_Eulerian_specification_of_the_flow_field) perspectives: the observer is either part of the flow, or has a fixed position (not in flow). The Lagrangian perspective gives rise to (many) flowlines, the Eulerian to a (sequence of) vector fields (where each pixel has a vector value, with direction and strength, or movement decomposed along the coordinate axes)
+
+Flowlines can be seen as trajectories; they may relate to arbitrary particles, or to specific (groups of) particles, e.g. when thresholding a wind field to identify storms or hurricanes, or thresholding an ocean wave field to identify a storm surge or tsunami. By thresholding, we _create_ objects from fields; note that such objects however can appear and disappear, and can merge and split.
+
+## Trajectories
+
+Trajectories are formed by moving objects or events: people, cars, thunderstorms, planes, birds, air particles, and so on. Laws of physics determine that an object has one and only one location for each point in time of its existence, and hence is a function 
+
+$$T \Rightarrow S$$ 
+
+(or: $S = f(T)$).
+
+_Observed_ trajectories typically consist of _fixes_, an ordered sequence of $\{T,S\}$ time-location pairs, maximally one location per time step.
+
+In adittion to fixes, there may be _attributes_, related to
+
+* each fix, subsequent sets of fixes, and derived from the fixes (speed, direction, acceleration, transportation mode)
+* each fix, and externally measured (temperature, air pressure, fuel consumption, any sensed property), giving rise to a _marked trajectory_
+* each trajectory (the ID of the object moving)
+
+Fixes may be dense (e.g., GPS fix every few seconds) or sparse (e.g., your bank card payments), and may be regular or irregularly distributed over time. Dense trajectories are often interpolated linearly, or even
+thinned before analysis. Linear interpolation is simple, but physically always unrealistic.
+
+(Interpolated) movement can be free (birds, air particles, thunder storms, planes) or restricted (persons, cars, fish). 
+
+* (example Google timeline)
+
+Constructing the path of an object (car) from GPS fixes constrained to a transportation network (roads) is called _map matching_.
+
+A _time slice_ of a set of trajectories gives a _point pattern_ with all the locations of the objects at that moment in time. From that we can compute a density map, and for all time slices we get an animation, or space-time estimate, of the density dynamics.
+
+In point pattern analysis, many examples involve non-moving objects:
+
+* static objects like buildings, trees, outcrops
+* time _aggregations_ of short-living events (crime cases, deaths)
+* time _aggregations_ of longer living events (gorilla nests for a particular year)
+
+Rocío Joo and co-workers wrote the [R task view on Tracking](https://cran.r-project.org/web/views/Tracking.html), and an accompanying [paper](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/1365-2656.13116)
+
+Analysis questions may involve:
+
+* how can we reconstruct the hurricane path from 6-hr locations?
+* where does bird species $x$ spend the winter?
+* can persons A and B have met during day D? (alibi problem)
+* can we predict traffic jams for time T, day Y?
+* How should we drive and when will we arrive in location X (navigation)
+
+```{r}
+library(trajectories)
+smth = function(x,y,xout,...) predict(smooth.spline(as.numeric(x), y), as.numeric(xout))
+data(storms)
+plot(storms, type = 'p')
+suppressWarnings(storms.smooth <- approxTracksCollection(storms, FUN = smth, n = 200))
+plot(storms.smooth, col = 'red')
+```

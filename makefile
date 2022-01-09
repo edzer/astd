@@ -1,4 +1,4 @@
-FILE	= cubes
+FILE	= movement
 
 all:
 	vi $(FILE).Rmd
