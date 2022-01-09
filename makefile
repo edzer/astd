@@ -1,4 +1,4 @@
-FILE	= movement
+FILE	= lec1
 
 all:
 	vi $(FILE).Rmd
