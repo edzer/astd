@@ -1,0 +1,35 @@
+---
+title: "trajectory + data cube exercise"
+author: "Edzer Pebesma"
+date: "1/12/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this exercise, we create a data cube from a set of trajectories
+
+## Data
+
+Consider the storms package in `dplyr`:
+```{r}
+library(dplyr)
+data(storms)
+storms
+```
+
+The task is analyse the variability of storms, or storm severity, over time. 
+
+Read up on this dataset from its help file, obtained by `?storms`. If you are ambitious, you are also welcome to use the entire hurdat dataset from NOAA.
+
+## Analyse
+
+1. create a time sequence of maps of storm intensity, use (for instance) a 5 x 5 degree spatial grid and 5-year time periods. Think about whether you want to aggregate storm instances (every storm contributes maximally one data point) or storm fixes, as the 6-hour fixes in the `storms` dataset.
+
+2.  From the time sequence of storms, compute for every grid cell the temporal trend (increase or decrease) of storm intensity, and plot the results.
+
+3. (bonus) repeat 1 and 2, but for each of the levels of storm `status`. 
+
+4. How many dimensions do each of the resulting data cubes have?
