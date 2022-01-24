@@ -26,10 +26,53 @@ Read up on this dataset from its help file, obtained by `?storms`. If you are am
 
 ## Analyse
 
-1. create a time sequence of maps of storm intensity, use (for instance) a 5 x 5 degree spatial grid and 5-year time periods. Think about whether you want to aggregate storm instances (every storm contributes maximally one data point) or storm fixes, as the 6-hour fixes in the `storms` dataset.
+1. create a time sequence of maps of storm intensity, use (for instance) a spatial grid with 5 degree x 5 degree resolution, and 5-year time periods. Think about whether you want to aggregate storm instances (every storm contributes maximally one data point) or storm fixes, as the 6-hour fixes in the `storms` dataset.
 
 2.  From the time sequence of storms, compute for every grid cell the temporal trend (increase or decrease) of storm intensity, and plot the results.
 
 3. (bonus) repeat 1 and 2, but for each of the levels of storm `status`. 
 
 4. How many dimensions do each of the resulting data cubes have?
+
+
+```{r}
+storms$lat_cl = cut(storms$lat, seq(5, 55, 5), right = FALSE)
+storms$long_cl = cut(storms$long, seq(-110, -5, 5), right = FALSE)
+storms$yr_cl = cut(storms$year, seq(1975, 2015, 5), right = FALSE)
+library(ggplot2)
+fn = function(x) length(unique(x))
+a = aggregate(storms["name"], storms[c("lat_cl", "long_cl", "yr_cl")], fn)
+ggplot(a) + geom_raster(aes(x = long_cl, y = lat_cl, fill = name)) + facet_wrap(~yr_cl)
+a = aggregate(storms["year"], storms[c("lat_cl", "long_cl", "yr_cl")], length, drop = FALSE)
+ggplot(a) + geom_raster(aes(x = long_cl, y = lat_cl, fill = year)) + facet_wrap(~yr_cl)
+a$year [ is.na(a$year) ] = 0
+ggplot(a) + geom_raster(aes(x = long_cl, y = lat_cl, fill = year)) + facet_wrap(~yr_cl)
+```
+
+```{r}
+# try this:
+# a = aggregate(storms["year"], storms[c("lat_cl", "long_cl")], print, drop = FALSE)
+s = sample(1985:2015, 50, replace = TRUE)
+(ts = table(s))
+x = as.numeric(names(ts))
+y = as.numeric(ts)
+plot(y~x)
+abline(lm(y~x))
+coef(lm(y~x))
+coef(lm(y~x))[["x"]]
+```
+
+```{r}
+get_slope = function(x) {
+  ts = table(x)
+  X = as.numeric(names(ts))
+  y = as.numeric(ts)
+  coef(lm(y~X))[["X"]]
+}
+a = aggregate(storms["year"], storms[c("lat_cl", "long_cl")], get_slope, drop = FALSE)
+ggplot(a) + geom_raster(aes(x = long_cl, y = lat_cl, fill = year))
+ggplot(subset(a, year > -.7)) + geom_raster(aes(x = long_cl, y = lat_cl, fill = year))
+```
+
+Another solution is shown in these slides: https://edzer.github.io/rstudio_conf/2019/#1
+with .Rmd found here: https://github.com/edzer/rstudio_conf/blob/master/2019/pres.Rmd

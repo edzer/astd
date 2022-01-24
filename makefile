@@ -1,4 +1,4 @@
-FILE	= lec1
+FILE	= storms
 
 all:
 	vi $(FILE).Rmd
