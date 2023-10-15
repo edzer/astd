@@ -1,12 +1,14 @@
-FILE	= storms
+#FILE	= storms
+FILE	= intro_R
 
 all:
 	vi $(FILE).Rmd
 	make knit
 
 knit:
-	Rscript -e 'rmarkdown::render("$(FILE).Rmd")'
-	mv $(FILE).html docs
+	#Rscript -e 'rmarkdown::render("$(FILE).Rmd")'
+	quarto render $(FILE).Rmd
+	cp -r $(FILE).html $(FILE)_files docs
 
 view:
 	google-chrome docs/$(FILE).html
