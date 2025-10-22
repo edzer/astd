@@ -18,29 +18,6 @@ For the participants to develop
 * software skills for analysing spatio-temporal data
 * skills to make analyses reproducible, and communicate these
 
-# Course schedule: 
-
-* Monday lectures: 12:15 - 13:45; Thu exercises 10:15 - 11:45.
-* Zoom link: see Learnweb
-* Below: SDS refers to chapters in https://r-spatial.org/book/
-
-1. Oct 11: Intro: SDS Ch 10; Reproducibility (I)
-1. Oct 18: SDS Ch 11 [Point Patterns](pp.html)
-1. Oct 25: SDS Ch 12 Spatial Interpolation
-1. Nov 1: (holiday) -> Nov 2: Gilberto Camara guest lecture
-1. Nov 8: SDS Ch 13 Spatiotemporal geostatistics
-1. Nov 15: SDS Ch 14 Proximity and areal data
-1. Nov 22: SDS Ch 15 Measures for spatial autocorrelation
-1. Nov 29: Reproducibility II: ERC (Eftychia Koukouraki)
-1. Dec 6: SDS Ch 16 Spatial Regression
-1. Dec 13: SDS Ch 17 Spatial Econometrics Models
-1. Dec 20: [Data Cube Analytics](cubes.html)
-1. Jan 10: Analysing [Movement](movement.html) data; [storms exercise](storms.html)
-1. Jan 17: Prepare Assignment (I)
-1. Jan 24: Prepare Assignment (II)
-1. Jan 31: Prepare Assignment (III)
-
-
 # Introduction
 
 1. What are spatiotemporal data? (is it spatio-temporal or spatiotemporal?)
